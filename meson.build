@@ -2,33 +2,57 @@ project(
   'fun_engine',
   'cpp',
   version: '0.1.0',
-  default_options: ['warning_level=3'],
+  default_options: ['cpp_std=c++23,c++20', 'warning_level=3'],
+)
+
+build_python_module = get_option('python_module')
+build_executable = get_option('executable')
+
+compiler = meson.get_compiler('cpp')
+
+if not compiler.check_header('format')
+  error('Compiler does not have the format header available, update your compiler')
+endif
+
+add_global_arguments(
+  [
+    '-msse',
+    '-msse2',
+    '-msse3',
+    '-msse4.1',
+    '-msse4.2',
+  ],
+  language: 'cpp',
 )
 
 if host_machine.system() == 'emscripten'
-  add_global_arguments(['-msimd128', '-std=c++20'], language: 'cpp')
+  add_global_arguments(
+    [
+      '-msimd128',
+    ],
+    language: 'cpp',
+  )
 else
   add_global_arguments(
     [
-      '-std=c++23',
-      '-fPIC',
-      '-Wno-gnu-anonymous-struct',
-      '-Wfatal-errors',
-      '-fno-fast-math',
-      '-fno-unsafe-math-optimizations',
       '-mavx',
       '-mavx2',
-      '-msse2',
-      '-msse3',
-      '-msse4.1',
-      '-msse4.2',
     ],
     language: 'cpp',
   )
 endif
 
-compiler = meson.get_compiler('cpp')
-build_python_module = get_option('python_module')
+if compiler.get_id() != 'msvc'
+  add_global_arguments(
+    [
+      '-fno-fast-math',
+      '-fno-unsafe-math-optimizations',
+      '-Wfatal-errors',
+      '-Wno-gnu-anonymous-struct',
+    ],
+    language: 'cpp',
+  )
+endif
 
 if compiler.get_id() == 'clang'
   add_global_arguments(
@@ -79,18 +103,14 @@ if build_python_module
       'python_module/module.cpp',
     ],
     install: true,
-    link_with: lib,
-    dependencies: pybind11_dep,
+    dependencies: [pybind11_dep, lib_deps],
     include_directories: inc,
   )
 endif
 
-executable(
-  'funengine',
-  ['src/main.cpp'],
-  install: true,
-  dependencies: lib_deps,
-)
+if build_executable
+  executable('funengine', ['src/main.cpp'], install: true, link_with: lib)
+endif
 
 import('pkgconfig').generate(
   libraries: lib,

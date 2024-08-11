@@ -1,4 +1,4 @@
-name: 'General Testing'
+name: "General Testing"
 on:
   - push
   - pull_request
@@ -8,19 +8,64 @@ permissions:
   pull-requests: read
 
 jobs:
-  test_wasm:
-    runs-on: ubuntu-22.04
+  x86_64:
+    continue-on-error: true
+    strategy:
+      matrix:
+        compiler:
+          - gcc
+          - clang
+        os:
+          - windows-latest
+          - ubuntu-latest
+        include:
+          - os: windows-latest
+            compiler: msvc
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Tox
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.build') }}-${{ hashFiles('./tox.ini')}}
+          restore-keys:  ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.build') }}-${{ hashFiles('./tox.ini')}}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: |
+            3.8
+            3.9
+            3.10
+            3.11
+            3.12
+          cache: "pip"
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows') }}
+      - name: Install tox
+        run: pip install tox
+      - name: run tox
+        run: tox --parallel-no-spinner
+
+  emscripten:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.3"
           cache: "pip"
-      - run: pip install pyodide-build>=0.23.0 pytest
-      - run: echo "EMSCRIPTEN_VERSION=$(pyodide config get emscripten_version)" >> $GITHUB_ENV
+      - run: |
+          pip install pyodide-build==0.27.3
       - uses: mymindstorm/setup-emsdk@v14
         with:
-          version: ${{ env.EMSCRIPTEN_VERSION }}
+          version: "3.1.58"
       - run: pyodide build
-      - run: pip install $(ls dist)
-
+      - run: |
+          pyodide venv .venv-pyodide
+          source .venv-pyodide/bin/activate
+          pip install pytest dist/$(ls dist)
+          pytest
