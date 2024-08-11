@@ -53,7 +53,7 @@ public:
     return curr_value;
   }
 
-  FORCE_INLINE double magnitude() {
+  FORCE_INLINE double magnitude() const {
     double curr_sum = 0;
 
     for (auto curr_value : values)

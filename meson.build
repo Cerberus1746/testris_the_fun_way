@@ -73,6 +73,7 @@ endif
 sources = [
   'src/engine_object.cpp',
   'src/game_objects/game_object3d.cpp',
+  'src/international_system_units/internation_system_units.cpp',
 ]
 
 conf_data = configuration_data()
