@@ -1,8 +1,7 @@
-#pragma once
-#include "math/vectors/vector2.hpp"
-#include "matrix.hpp"
+import vector2;
+import matrix;
 
-namespace FunEngine::Math {
+export namespace FunEngine::Math {
 template <typename TYPE = double>
 class Matrix3x3 final : public Matrix<TYPE, 3, 3> {
 public:

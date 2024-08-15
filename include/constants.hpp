@@ -1,4 +1,3 @@
-#pragma once
 #define int_id typeid(int)
 #define float_id typeid(float)
 #define double_id typeid(double)
@@ -19,3 +18,5 @@
 #else
 #error Unsupported compiler
 #endif
+
+#define ParentMatrix Matrix<TYPE, SIZE_X, SIZE_Y>

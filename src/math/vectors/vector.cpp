@@ -1,8 +1,5 @@
-#pragma once
+module;
 
-#include "../constants.hpp"
-#include "../utils.hpp"
-#include "constants.hpp"
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -11,7 +8,14 @@
 #include <string>
 #include <typeinfo>
 
-namespace FunEngine::Math {
+#include "constants.hpp"
+
+export module math.vector;
+
+import math;
+import math.utils;
+
+export namespace FunEngine::Math {
 template <Numeric TYPE = double, size_t SIZE = 1> class Vector {
 public:
   std::array<TYPE, SIZE> values{};

@@ -1,8 +1,19 @@
-#include "engine_object.hpp"
 #include <string>
+#include <unordered_set>
 
 namespace FunEngine {
-int EngineObject::last_instance_id = 0;
+class EngineObject {
+private:
+  static std::unordered_set<int> used_instanced_ids;
+  static std::unordered_set<int> used_prefab_ids;
+  static int last_instance_id;
 
-EngineObject::EngineObject(const std::string &obj_name) : name(obj_name) {}
+public:
+  int id = 0;
+  int prefab_id = 0;
+
+  std::string name;
+
+  EngineObject(const std::string &obj_name);
+};
 } // namespace FunEngine

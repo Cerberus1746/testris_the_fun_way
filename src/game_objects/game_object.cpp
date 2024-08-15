@@ -1,5 +1,13 @@
-#include "game_objects/game_object.hpp"
+import <vector>;
 
-namespace FunEngine {
-GameObject GameObject::get_child(size_t index) { return children[index]; }
+import engine_object;
+
+export namespace FunEngine {
+class GameObject : EngineObject {
+public:
+  GameObject *parent;
+  vector<GameObject> children;
+
+  GameObject get_child(size_t index){ return children[index]; }
+};
 } // namespace FunEngine

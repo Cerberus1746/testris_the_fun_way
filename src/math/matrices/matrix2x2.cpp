@@ -1,9 +1,8 @@
-#pragma once
 
-#include "matrix.hpp"
-#include <typeinfo>
+import matrix;
+import <typeinfo>;
 
-namespace FunEngine::Math {
+export namespace FunEngine::Math {
 template <typename TYPE = double>
 class Matrix2x2 final : public Matrix<TYPE, 2, 2> {
 public:

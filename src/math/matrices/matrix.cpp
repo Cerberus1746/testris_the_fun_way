@@ -1,20 +1,24 @@
+module;
 
-#pragma once
-
-#include "constants.hpp"
 #include <array>
 #include <cassert>
 #include <cstddef>
 
-#define ParentMatrix Matrix<TYPE, SIZE_X, SIZE_Y>
+#include "constants.hpp"
 
-namespace FunEngine::Math {
-template <typename TYPE = double, size_t SIZE_X = 2, size_t SIZE_Y = 2>
+export module math.matrix;
+
+import math;
+
+export namespace FunEngine::Math {
+template <Numeric TYPE = double, size_t SIZE_X = 2, size_t SIZE_Y = 2>
 class Matrix {
 public:
   std ::array<TYPE, SIZE_X * SIZE_Y> values{};
 
-  Matrix(std ::array<TYPE, SIZE_X * SIZE_Y> items) { this->values = items; }
+  explicit Matrix(std ::array<TYPE, SIZE_X * SIZE_Y> items) {
+    this->values = items;
+  }
 
   ParentMatrix *transpose;
 

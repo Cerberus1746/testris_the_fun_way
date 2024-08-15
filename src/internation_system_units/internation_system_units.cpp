@@ -1,8 +1,10 @@
-namespace FunEngine::SI {
+export module si;
+
+export namespace FunEngine::SI {
 struct Base {
   double value;
 
-  explicit Base(const double &from);
+  explicit Base(const double &from) { this->value = from; }
 };
 
 struct Meters : Base {};

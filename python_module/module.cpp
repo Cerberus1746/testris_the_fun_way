@@ -1,10 +1,11 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include "engine_object.hpp"
-#include "math/vectors/vector2.hpp"
-#include "math/vectors/vector3.hpp"
-#include "math/vectors/vector4.hpp"
+import math;
+import math.utils;
+import math.vector2;
+import math.vector3;
+import math.vector4;
 
 namespace py = pybind11;
 namespace fun = FunEngine;
@@ -45,8 +46,8 @@ void declare_vector4(py::module &m, const std::string &type_name) {
 }
 
 PYBIND11_MODULE(funenginepy, m) {
-  py::class_<fun::EngineObject>(m, "EngineObject")
-      .def(py::init<const std::string &>());
+  /*py::class_<fun::EngineObject>(m, "EngineObject")
+      .def(py::init<const std::string &>());*/
 
   auto math_module = m.def_submodule("math");
 

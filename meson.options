@@ -1,2 +1,0 @@
-option('python_module', type : 'boolean', value : true)
-option('executable', type : 'boolean', value : false)

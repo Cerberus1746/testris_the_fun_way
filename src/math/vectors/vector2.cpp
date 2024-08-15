@@ -1,10 +1,13 @@
-#pragma once
+module;
 
-#include "./vector.hpp"
 #include <cmath>
-#include <immintrin.h>
 
-namespace FunEngine::Math {
+export module math.vector2;
+
+import math;
+import math.vector;
+
+export namespace FunEngine::Math {
 template <Numeric TYPE = double>
 class Vector2 final : public Vector<TYPE, 2> {
 public:

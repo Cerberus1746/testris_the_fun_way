@@ -1,8 +1,9 @@
-#pragma once
+export module math.vector3;
 
-#include "./vector.hpp"
+import math;
+import math.vector;
 
-namespace FunEngine::Math {
+export namespace FunEngine::Math {
 template <Numeric TYPE = double>
 class Vector3 final : public Vector<TYPE, 3> {
 public:

@@ -13,8 +13,10 @@ jobs:
     strategy:
       matrix:
         compiler:
-          - gcc
-          - clang
+          # TODO: in the future check the availability of gcc version 14
+          # Because currently, it is quite bad.
+          #- gcc-14
+          - clang-18
         os:
           - windows-latest
           - ubuntu-latest
@@ -23,13 +25,24 @@ jobs:
             compiler: msvc
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Cache Apt
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/cache/apt/archives
+            /var/lib/apt/lists
+          key: ${{ runner.os }}
+          restore-keys:  ${{ runner.os }}
       - name: Cache Tox
         uses: actions/cache@v3
         with:
           path: .tox
-          key: ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.build') }}-${{ hashFiles('./tox.ini')}}
-          restore-keys:  ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/*.build') }}-${{ hashFiles('./tox.ini')}}
+          key: ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('./tox.ini')}}
+          restore-keys:  ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('./tox.ini')}}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -39,7 +52,6 @@ jobs:
             3.10
             3.11
             3.12
-          cache: "pip"
       - name: Setup Cpp
         uses: aminya/setup-cpp@v1
         with:
@@ -54,18 +66,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12.3"
           cache: "pip"
-      - run: |
-          pip install pyodide-build==0.27.3
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: clang
+      - name: Install pyodide
+        run: pip install pyodide-build==0.27.3
       - uses: mymindstorm/setup-emsdk@v14
         with:
           version: "3.1.58"
-      - run: pyodide build
+      - run: pyodide build . cmake.define.PYBIND11_USE_CROSSCOMPILING=ON
       - run: |
           pyodide venv .venv-pyodide
           source .venv-pyodide/bin/activate
           pip install pytest dist/$(ls dist)
-          pytest
+          pytest tests
