@@ -15,8 +15,6 @@ endif()
 
 include_directories(include)
 
-add_subdirectory(submodules/pybind11)
-
 add_library(funengine STATIC)
 target_sources(funengine
   PUBLIC
@@ -34,11 +32,15 @@ target_sources(funengine
 
 
 if(PYTHON_INSTALL)
+  add_subdirectory(submodules/nanobind)
+
   find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
   message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
   message(STATUS "Python_VERSION: ${Python_VERSION}")
 
-  pybind11_add_module(funenginepy  python_module/module.cpp)
+  find_package(nanobind CONFIG REQUIRED)
+
+  nanobind_add_module(funenginepy python_module/module.cpp)
   target_link_libraries(funenginepy PUBLIC funengine)
 
   install(TARGETS funenginepy DESTINATION .)

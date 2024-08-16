@@ -1,5 +1,4 @@
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <nanobind/nanobind.h>
 
 import math;
 import math.utils;
@@ -7,7 +6,6 @@ import math.vector2;
 import math.vector3;
 import math.vector4;
 
-namespace py = pybind11;
 namespace fun = FunEngine;
 namespace math = FunEngine::Math;
 
@@ -45,7 +43,7 @@ void declare_vector4(py::module &m, const std::string &type_name) {
       .def("__repr__", &Class::to_string);
 }
 
-PYBIND11_MODULE(funenginepy, m) {
+NB_MODULE(funenginepy, m) {
   /*py::class_<fun::EngineObject>(m, "EngineObject")
       .def(py::init<const std::string &>());*/
 
