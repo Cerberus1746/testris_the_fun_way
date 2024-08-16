@@ -36,7 +36,11 @@ if(PYTHON_BINDINGS)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
   endif()
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/submodules/nanobind)
+  execute_process(
+    COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+    OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
+  find_package(nanobind CONFIG REQUIRED)
+  #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/submodules/nanobind)
   message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
   message(STATUS "Python_VERSION: ${Python_VERSION}")
 

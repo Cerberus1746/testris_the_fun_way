@@ -72,18 +72,25 @@ jobs:
         with:
           python-version: "3.12.3"
           cache: "pip"
+      - id: cache-pyodide-env
+        uses: actions/cache@v4
+        with:
+          path: .venv-pyodide/
+          key: ${{ hashFiles('**/CMakeLists.txt') }}
       - name: Setup Cpp
         uses: aminya/setup-cpp@v1
         with:
-          compiler: clang
+          compiler: clang-18
       - name: Install pyodide
         run: pip install pyodide-build==0.27.3
       - uses: mymindstorm/setup-emsdk@v14
         with:
           version: "3.1.58"
       - run: pyodide build .
+      - name: setup env
+        run: pyodide venv .venv-pyodide
+        if: steps.cache-pyodide-env.outputs.cache-hit != 'true'
       - run: |
-          pyodide venv .venv-pyodide
           source .venv-pyodide/bin/activate
           pip install pytest dist/$(ls dist)
           pytest tests
