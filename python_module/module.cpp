@@ -1,4 +1,5 @@
 #include <nanobind/nanobind.h>
+#include <string>
 
 import math;
 import math.utils;
@@ -12,7 +13,7 @@ namespace nb = nanobind;
 template <math::Numeric TYPE>
 void declare_vector2(nb::module_ &m, const std::string &type_name) {
   using Class = math::Vector2<TYPE>;
-  std::string pyclass_name = "Vector2" + type_name;
+  std::string pyclass_name = (std::string) "Vector2" + type_name;
   nb::class_<Class>(m, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &>())
       .def("angle", &Class::angle)
@@ -24,7 +25,7 @@ void declare_vector2(nb::module_ &m, const std::string &type_name) {
 template <math::Numeric TYPE>
 void declare_vector3(nb::module_ &m, const std::string &type_name) {
   using Class = math::Vector3<TYPE>;
-  std::string pyclass_name = "Vector3" + type_name;
+  std::string pyclass_name = (std::string) "Vector3" + type_name;
   nb::class_<Class>(m, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &, TYPE &>())
       .def("angle_to", &Class::angle_to)
@@ -35,7 +36,7 @@ void declare_vector3(nb::module_ &m, const std::string &type_name) {
 template <math::Numeric TYPE>
 void declare_vector4(nb::module_ &m, const std::string &type_name) {
   using Class = math::Vector4<TYPE>;
-  std::string pyclass_name = "Vector4" + type_name;
+  std::string pyclass_name = (std::string) "Vector4" + type_name;
   nb::class_<Class>(m, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &, TYPE &, TYPE &>())
       .def("angle_to", &Class::angle_to)
