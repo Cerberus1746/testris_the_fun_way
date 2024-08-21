@@ -32,20 +32,17 @@ target_sources(funengine
 if(PYTHON_BINDINGS)
   find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
-  if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-  endif()
   execute_process(
     COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
     OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
-  find_package(nanobind CONFIG REQUIRED)
-  #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/submodules/nanobind)
+  #find_package(nanobind CONFIG REQUIRED)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/submodules/nanobind)
   message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
   message(STATUS "Python_VERSION: ${Python_VERSION}")
 
   nanobind_add_module(funenginepy python_module/module.cpp)
-  target_link_libraries(funenginepy PRIVATE funengine)
+
+  target_link_libraries(funenginepy PUBLIC funengine)
 
   install(TARGETS funenginepy DESTINATION .)
 endif()
