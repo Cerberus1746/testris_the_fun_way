@@ -16,8 +16,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 if(EMSCRIPTEN)
-  add_compile_options(${TARGET_NAME} PUBLIC -fexceptions)
-  add_link_options(${TARGET_NAME} PUBLIC -fexceptions)
+  add_compile_options(${TARGET_NAME} -fexceptions)
+  add_link_options(${TARGET_NAME} -fexceptions)
 endif()
 
 include_directories(include)
