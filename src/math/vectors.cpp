@@ -10,14 +10,13 @@ module;
 
 #include "constants.hpp"
 
-export module math.vector;
+export module math.vectors;
 
 import math;
 import math.utils;
 
 export namespace FunEngine::Math {
-template <Numeric TYPE = double, size_t SIZE = 1> class Vector {
-public:
+template <Numeric TYPE = double, size_t SIZE = 1> struct Vector {
   std::array<TYPE, SIZE> values{};
 
   TYPE &operator[](size_t idx) { return values[idx]; }
@@ -33,7 +32,12 @@ public:
   }
 
   std::string to_string() {
-    auto vec_str = std::format("Vector{}(", SIZE);
+    std::string vec_str;
+    if (typeid(TYPE) == typeid(int))
+      vec_str = std::format("Vector{}Int(", SIZE);
+    else
+      vec_str = std::format("Vector{}(", SIZE);
+
     for (size_t i = 0; i < SIZE; i++) {
       vec_str += std::to_string(values[i]);
       if (i < SIZE - 1)
@@ -91,5 +95,56 @@ public:
 
     return true;
   }
+};
+
+template <Numeric TYPE = double>
+struct Vector2 final : Vector<TYPE, 2> {
+  TYPE *x_axis = &this->values[0];
+  TYPE *y_axis = &this->values[1];
+
+  using Vector<TYPE, 2>::Vector;
+  Vector2(TYPE x_axis, TYPE y_axis) : Vector<TYPE, 2>({x_axis, y_axis}) {}
+
+  TYPE get_x() { return this->values[0]; }
+  TYPE get_y() { return this->values[1]; }
+
+  void set_x(TYPE value) { this->values[0] = value; }
+  void set_y(TYPE value) { this->values[1] = value; }
+
+  double angle() { return atan2(this->values[1], this->values[0]); }
+};
+
+template <Numeric TYPE = double>
+struct Vector3 final : Vector<TYPE, 3> {
+  using Vector<TYPE, 3>::Vector;
+
+  Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis)
+      : Vector<TYPE, 3>({x_axis, y_axis, z_axis}) {}
+
+  TYPE get_x() { return this->values[0]; }
+  TYPE get_y() { return this->values[1]; }
+  TYPE get_z() { return this->values[2]; }
+
+  void set_x(TYPE value) { this->values[0] = value; }
+  void set_y(TYPE value) { this->values[1] = value; }
+  void set_z(TYPE value) { this->values[2] = value; }
+};
+
+template <typename TYPE = double>
+struct Vector4 final : Vector<TYPE, 4> {
+  using Vector<TYPE, 4>::Vector;
+
+  Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis)
+      : Vector<TYPE, 4>({x_axis, y_axis, z_axis, w_axis}) {}
+
+  TYPE get_x() { return this->values[0]; }
+  TYPE get_y() { return this->values[1]; }
+  TYPE get_z() { return this->values[2]; }
+  TYPE get_w() { return this->values[3]; }
+
+  void set_x(TYPE value) { this->values[0] = value; }
+  void set_y(TYPE value) { this->values[1] = value; }
+  void set_z(TYPE value) { this->values[2] = value; }
+  void set_w(TYPE value) { this->values[3] = value; }
 };
 } // namespace FunEngine::Math

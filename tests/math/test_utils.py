@@ -1,9 +1,6 @@
-from funenginepy import math
-
+from FunEnginePy.math import approximately as aprox
 
 def test_math_approximately():
-    aprox = math.approximately
-
     assert aprox(10, 10)
     assert aprox(10000.001, 10000.001)
     assert aprox(1e-44, 1e-44)
