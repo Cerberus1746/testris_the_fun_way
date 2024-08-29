@@ -1,3 +1,6 @@
 [submodule "submodules/nanobind"]
 	path = submodules/nanobind
 	url = git@github.com:wjakob/nanobind.git
+[submodule "submodules/WebGPU-distribution"]
+	path = submodules/WebGPU-distribution
+	url = git@github.com:eliemichel/WebGPU-distribution.git

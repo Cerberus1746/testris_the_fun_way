@@ -2,9 +2,9 @@ module;
 
 #include <limits>
 
-export module math.utils;
+export module FunEngine.math.utils;
 
-import math;
+import FunEngine.math;
 
 export namespace FunEngine::Math {
 template <Numeric TYPE>
