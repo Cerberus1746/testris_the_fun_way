@@ -6,9 +6,9 @@ module;
 
 #include "constants.hpp"
 
-export module math.matrix;
+export module FunEngine.math.matrix;
 
-import math;
+import FunEngine.math;
 
 export namespace FunEngine::Math {
 template <Numeric TYPE = double, size_t SIZE_X = 2, size_t SIZE_Y = 2>

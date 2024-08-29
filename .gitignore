@@ -1,6 +1,4 @@
-builddir/
-wasmbuild/
-build/
+build*/
 dist/
 
 #logs
@@ -25,4 +23,3 @@ subprojects/tomlplusplus-*
 subprojects/Vulkan-Headers-*
 subprojects/pybind11-*
 general-testing.ipynb
-build-dbg/

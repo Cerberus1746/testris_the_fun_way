@@ -1,10 +1,11 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
-#include <string>
 
-import math;
-import math.utils;
-import math.vectors;
+import FunEngine.graphics;
+
+import FunEngine.math;
+import FunEngine.math.utils;
+import FunEngine.math.vectors;
 
 namespace math = FunEngine::Math;
 namespace nb = nanobind;
@@ -97,9 +98,11 @@ void declare_vector4(nb::module_ &m, const std::string &type_name) {
       .def("magnitude", &Class::magnitude);
 }
 
-NB_MODULE(FunEnginePy, m) {
+NB_MODULE(FunEngine, m) {
   /*nb::class_<fun::EngineObject>(m, "EngineObject")
       .def(nb::init<const std::string &>());*/
+
+  m.def("graphic_basic_test", &FunEngine::Graphics::basic_test);
 
   auto math_module = m.def_submodule("math");
 

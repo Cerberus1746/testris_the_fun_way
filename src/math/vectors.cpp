@@ -2,7 +2,6 @@ module;
 
 #include <array>
 #include <cmath>
-#include <cstddef>
 #include <format>
 #include <stdexcept>
 #include <string>
@@ -10,13 +9,14 @@ module;
 
 #include "constants.hpp"
 
-export module math.vectors;
+export module FunEngine.math.vectors;
 
-import math;
-import math.utils;
+import FunEngine;
+import FunEngine.math;
+import FunEngine.math.utils;
 
 export namespace FunEngine::Math {
-template <Numeric TYPE = double, size_t SIZE = 1> struct Vector {
+template <Numeric TYPE = double, unsigned short int SIZE = 1> struct Vector {
   std::array<TYPE, SIZE> values{};
 
   TYPE &operator[](size_t idx) { return values[idx]; }
