@@ -1,13 +1,13 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 
-import FunEngine.graphics;
-
-import FunEngine.math;
-import FunEngine.math.utils;
-import FunEngine.math.vectors;
+import engine.graphics;
+import engine.math;
+import engine.math.utils;
+import engine.math.vectors;
 
 namespace math = FunEngine::Math;
+namespace graphics = FunEngine::Graphics;
 namespace nb = nanobind;
 
 template <math::Numeric TYPE>
@@ -34,7 +34,6 @@ void declare_vector2(nb::module_ &m, const std::string &type_name) {
       .def("angle", &Class::angle_to)
       .def("angle_to", &Class::angle_to)
       .def("magnitude", &Class::magnitude);
-
 }
 
 template <math::Numeric TYPE>
@@ -98,11 +97,9 @@ void declare_vector4(nb::module_ &m, const std::string &type_name) {
       .def("magnitude", &Class::magnitude);
 }
 
-NB_MODULE(FunEngine, m) {
+NB_MODULE(FunEnginePy, m) {
   /*nb::class_<fun::EngineObject>(m, "EngineObject")
       .def(nb::init<const std::string &>());*/
-
-  m.def("graphic_basic_test", &FunEngine::Graphics::basic_test);
 
   auto math_module = m.def_submodule("math");
 
