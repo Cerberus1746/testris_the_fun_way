@@ -1,6 +1,9 @@
 [submodule "submodules/nanobind"]
 	path = submodules/nanobind
 	url = git@github.com:wjakob/nanobind.git
-[submodule "submodules/WebGPU-distribution"]
-	path = submodules/WebGPU-distribution
-	url = git@github.com:eliemichel/WebGPU-distribution.git
+[submodule "submodules/sdl"]
+	path = submodules/sdl
+	url = git@github.com:libsdl-org/SDL.git
+[submodule "submodules/shadercross"]
+	path = submodules/shadercross
+	url = git@github.com:flibitijibibo/SDL_gpu_shadercross.git

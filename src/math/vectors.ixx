@@ -9,11 +9,10 @@ module;
 
 #include "constants.hpp"
 
-export module FunEngine.math.vectors;
+export module engine.math.vectors;
 
-import FunEngine;
-import FunEngine.math;
-import FunEngine.math.utils;
+import engine.math;
+import engine.math.utils;
 
 export namespace FunEngine::Math {
 template <Numeric TYPE = double, unsigned short int SIZE = 1> struct Vector {

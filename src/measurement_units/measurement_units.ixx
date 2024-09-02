@@ -1,4 +1,4 @@
-export module FunEngine.si;
+export module engine.si;
 
 export namespace FunEngine::SI {
 struct Base {

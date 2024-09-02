@@ -1,4 +1,4 @@
-from FunEngine.math import approximately as aprox
+from FunEnginePy.math import approximately as aprox
 
 def test_math_approximately():
     assert aprox(10, 10)

@@ -1,6 +1,6 @@
-from FunEngine import math
-from FunEngine.math import approximately as aprox
-from FunEngine.math import Vector2, Vector2Int
+from FunEnginePy import math
+from FunEnginePy.math import approximately as aprox
+from FunEnginePy.math import Vector2, Vector2Int
 
 def  test_repr():
   assert repr(Vector2(10, 10)) == "Vector2(10.000000, 10.000000)"
