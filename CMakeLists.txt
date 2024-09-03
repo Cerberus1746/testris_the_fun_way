@@ -9,23 +9,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-Wfatal-errors)
 
-set(PYTHON_BINDINGS ON)
+option(ENGINE_PYTHON_BINDINGS "" ON)
+option(ENGINE_STATIC "" ON)
 option(USE_SDL_SUBMODULE "Use SDL from git in submodules" ON)
+
+if(EMSCRIPTEN)
+  set(ENGINE_STATIC ON)
+endif()
+
+if(ENGINE_STATIC)
+  set(SDL_STATIC ON)
+  set(SDL_SHARED OFF)
+  add_library(${SKBUILD_PROJECT_NAME} STATIC)
+else()
+  set(SDL_STATIC OFF)
+  set(SDL_SHARED ON)
+  add_library(${SKBUILD_PROJECT_NAME} SHARED)
+endif()
 
 if(USE_SDL_SUBMODULE)
     add_subdirectory(submodules/sdl)
 else()
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 endif()
 
 include_directories(include)
 include_directories(submodules/shadercross)
-
-if(EMSCRIPTEN)
-  add_library(${SKBUILD_PROJECT_NAME} STATIC)
-else()
-  add_library(${SKBUILD_PROJECT_NAME} SHARED)
-endif()
 
 target_sources(${SKBUILD_PROJECT_NAME}
   PUBLIC
@@ -47,7 +56,7 @@ if(EMSCRIPTEN)
   add_link_options(-fexceptions)
 endif()
 
-if(PYTHON_BINDINGS)
+if(ENGINE_PYTHON_BINDINGS)
   set(PY_MODULE ${SKBUILD_PROJECT_NAME}Py)
   find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 

@@ -1,4 +1,0 @@
-module engine {
-  header "constants.hpp"
-  export *
-}
