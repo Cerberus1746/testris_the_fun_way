@@ -6,9 +6,10 @@ import engine.math;
 import engine.math.utils;
 import engine.math.vectors;
 
+namespace nb = nanobind;
+
 namespace math = FunEngine::Math;
 namespace graphics = FunEngine::Graphics;
-namespace nb = nanobind;
 
 template <math::Numeric TYPE>
 void declare_vector2(nb::module_ &m, const std::string &type_name) {

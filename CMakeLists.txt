@@ -6,12 +6,16 @@ project(${SKBUILD_PROJECT_NAME}
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-add_compile_options(-Wfatal-errors)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(ENGINE_PYTHON_BINDINGS "" ON)
 option(ENGINE_STATIC "" ON)
 option(USE_SDL_SUBMODULE "Use SDL from git in submodules" ON)
+
+include_directories(include)
+include_directories(submodules/shadercross)
+
+add_compile_options(-fno-stack-protector -fno-fast-math)
 
 if(EMSCRIPTEN)
   set(ENGINE_STATIC ON)
@@ -33,9 +37,6 @@ else()
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
 endif()
 
-include_directories(include)
-include_directories(submodules/shadercross)
-
 target_sources(${SKBUILD_PROJECT_NAME}
   PUBLIC
     FILE_SET CXX_MODULES FILES
@@ -45,11 +46,13 @@ target_sources(${SKBUILD_PROJECT_NAME}
       src/math/math.ixx
       src/math/utils.ixx
 
+      src/math/coordinates.ixx
       src/math/vectors.ixx
 
       src/math/matrices/matrix.ixx
 )
 
+target_compile_options(${SKBUILD_PROJECT_NAME} PRIVATE -Wall)
 target_link_libraries(${SKBUILD_PROJECT_NAME} PRIVATE SDL3::SDL3)
 
 if(EMSCRIPTEN)
@@ -70,16 +73,24 @@ if(ENGINE_PYTHON_BINDINGS)
 
   nanobind_add_module(${PY_MODULE} python_module/main_python.cpp)
 
-  target_link_libraries(${PY_MODULE} PRIVATE ${SKBUILD_PROJECT_NAME})
+  target_compile_options(${PY_MODULE} PRIVATE -Wall)
 
-  target_compile_options(${PY_MODULE} PUBLIC
-    -fmodules
-    -fbuiltin-module-map
-    -fimplicit-module-maps
-    -fmodules-cache-path=${CMAKE_BINARY_DIR}/clang-modules-cache
-  )
+  target_link_libraries(${PY_MODULE} PRIVATE ${SKBUILD_PROJECT_NAME})
 
   add_dependencies(${PY_MODULE} ${SKBUILD_PROJECT_NAME})
 
   install(TARGETS ${PY_MODULE} DESTINATION .)
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+  if(NOT MSVC)
+      add_compile_options(-Wfatal-errors)
+  endif()
+elseif(CMAKE_BUILD_TYPE MATCHES RELEASE)
+    add_compile_options(-O3)
+    if(MSVC)
+      add_compile_options(-WX)
+  else()
+      add_compile_options(-Werror)
+  endif()
 endif()

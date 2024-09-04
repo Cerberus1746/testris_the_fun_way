@@ -1,4 +1,3 @@
-from FunEnginePy import math
 from FunEnginePy.math import approximately as aprox
 from FunEnginePy.math import Vector2, Vector2Int
 
