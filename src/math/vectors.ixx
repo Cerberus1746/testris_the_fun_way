@@ -12,19 +12,21 @@ module;
 export module engine.math.vectors;
 
 import engine.math;
+import engine.math.coordinate;
 import engine.math.utils;
 
 export namespace FunEngine::Math {
-template <Numeric TYPE = double, unsigned short int SIZE = 1> struct Vector {
+template <Numeric TYPE = double, unsigned short int SIZE = 1>
+struct Vector : Coordinate<TYPE, SIZE> {
   std::array<TYPE, SIZE> values{};
 
-  TYPE &operator[](size_t idx) { return values[idx]; }
+  TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
-  bool operator==(Vector<TYPE, SIZE> &other) {
+  const bool operator==(Coordinate<TYPE, SIZE> &other) {
     if (typeid(TYPE) != typeid(int))
       throw std::logic_error("You can only compare vectors of type int, for "
                              "other types use approximately");
-    for (size_t i; i < SIZE; i++)
+    for (unsigned short int i = 0; i < SIZE; i++)
       if (values[i] != other[i])
         return false;
     return true;
@@ -97,15 +99,14 @@ template <Numeric TYPE = double, unsigned short int SIZE = 1> struct Vector {
 };
 
 template <Numeric TYPE = double>
-struct Vector2 final : Vector<TYPE, 2> {
-  TYPE *x_axis = &this->values[0];
-  TYPE *y_axis = &this->values[1];
+struct Vector2 final : Vector<TYPE, 2>, Coordinate2<TYPE> {
+  Vector2(TYPE x_axis, TYPE y_axis) {
+    set_x(x_axis);
+    set_y(y_axis);
+  }
 
-  using Vector<TYPE, 2>::Vector;
-  Vector2(TYPE x_axis, TYPE y_axis) : Vector<TYPE, 2>({x_axis, y_axis}) {}
-
-  TYPE get_x() { return this->values[0]; }
-  TYPE get_y() { return this->values[1]; }
+  TYPE get_x() const { return this->values[0]; }
+  TYPE get_y() const { return this->values[1]; }
 
   void set_x(TYPE value) { this->values[0] = value; }
   void set_y(TYPE value) { this->values[1] = value; }
@@ -114,15 +115,16 @@ struct Vector2 final : Vector<TYPE, 2> {
 };
 
 template <Numeric TYPE = double>
-struct Vector3 final : Vector<TYPE, 3> {
-  using Vector<TYPE, 3>::Vector;
+struct Vector3 final : Vector<TYPE, 3>, Coordinate3<TYPE> {
+  Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
+    set_x(x_axis);
+    set_y(y_axis);
+    set_z(z_axis);
+  }
 
-  Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis)
-      : Vector<TYPE, 3>({x_axis, y_axis, z_axis}) {}
-
-  TYPE get_x() { return this->values[0]; }
-  TYPE get_y() { return this->values[1]; }
-  TYPE get_z() { return this->values[2]; }
+  TYPE get_x() const { return this->values[0]; }
+  TYPE get_y() const { return this->values[1]; }
+  TYPE get_z() const { return this->values[2]; }
 
   void set_x(TYPE value) { this->values[0] = value; }
   void set_y(TYPE value) { this->values[1] = value; }
@@ -130,16 +132,18 @@ struct Vector3 final : Vector<TYPE, 3> {
 };
 
 template <typename TYPE = double>
-struct Vector4 final : Vector<TYPE, 4> {
-  using Vector<TYPE, 4>::Vector;
+struct Vector4 final : Vector<TYPE, 4>, Coordinate4<TYPE> {
+  Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
+    set_x(x_axis);
+    set_y(y_axis);
+    set_z(z_axis);
+    set_w(w_axis);
+  }
 
-  Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis)
-      : Vector<TYPE, 4>({x_axis, y_axis, z_axis, w_axis}) {}
-
-  TYPE get_x() { return this->values[0]; }
-  TYPE get_y() { return this->values[1]; }
-  TYPE get_z() { return this->values[2]; }
-  TYPE get_w() { return this->values[3]; }
+  TYPE get_x() const { return this->values[0]; }
+  TYPE get_y() const { return this->values[1]; }
+  TYPE get_z() const { return this->values[2]; }
+  TYPE get_w() const { return this->values[3]; }
 
   void set_x(TYPE value) { this->values[0] = value; }
   void set_y(TYPE value) { this->values[1] = value; }

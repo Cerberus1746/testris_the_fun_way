@@ -12,6 +12,9 @@ This will change once the features are out in releases.
 If you are having issues with gcc-13 do like me and use the highest available
 version of clang that you are able to install.
 
+We also use [SEMVER](https://semver.org/) versioning system so consider this
+engine an alpha before 0.8 and beta before 1.0.
+
 # FunEngine
 As in Dwarf Fortress fun: https://dwarffortresswiki.org/DF2014:Fun
 
