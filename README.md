@@ -1,6 +1,3 @@
-FunEngine
-As in Dwarf Fortress fun: https://dwarffortresswiki.org/DF2014:Fun
-
 Hello, this will be a 2D and 3D game engine made from scratch, with as few
 libraries as possible.
 
