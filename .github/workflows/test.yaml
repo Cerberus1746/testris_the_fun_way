@@ -41,8 +41,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .tox
-          key: ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('./tox.ini')}}
-          restore-keys:  ${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('./tox.ini')}}
+          key: ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys:  ${{ runner.os }}-${{ matrix.compiler }}-${{ hashFiles('**/CMakeLists.txt') }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -56,6 +56,7 @@ jobs:
         with:
           compiler: ${{ matrix.compiler }}
           vcvarsall: ${{ contains(matrix.os, 'windows') }}
+          ninja: true
       - name: Install tox
         run: pip install tox
       - name: run tox
@@ -80,6 +81,7 @@ jobs:
         uses: aminya/setup-cpp@v1
         with:
           compiler: clang-18
+          ninja: true
       - name: Install pyodide
         run: pip install pyodide-build==0.27.3
       - uses: mymindstorm/setup-emsdk@v14
