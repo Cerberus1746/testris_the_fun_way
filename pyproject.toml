@@ -3,7 +3,7 @@ requires = ["scikit-build-core", "nanobind"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name="FunEngine"
+name="clockwork_reverie"
 version = "0.1.0"
 requires-python = ">=3.9"
 
@@ -12,6 +12,7 @@ test = ["pytest"]
 
 [tool.scikit-build]
 cmake.version = ">=3.28"
+ninja.make-fallback = false
 
 [tool.scikit-build.cmake.define]
 ENGINE_PYTHON_BINDINGS="ON"

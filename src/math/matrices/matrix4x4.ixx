@@ -1,7 +1,7 @@
 import vector3;
 import matrix;
 
-export namespace FunEngine::Math {
+export namespace ClockworkReverie::Math {
 template <typename TYPE = double>
 class Matrix4x4 final : public Matrix<TYPE, 4, 4> {
 public:
@@ -27,4 +27,4 @@ public:
     this->set(3, 2, vector[2]);
   }
 };
-} // namespace FunEngine::Math
+} // namespace ClockworkReverie::Math

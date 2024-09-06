@@ -15,10 +15,7 @@ version of clang that you are able to install.
 We also use [SEMVER](https://semver.org/) versioning system so consider this
 engine an alpha before 0.8 and beta before 1.0.
 
-# FunEngine
-As in Dwarf Fortress fun: https://dwarffortresswiki.org/DF2014:Fun
-
-The name is temporary.
+# Clockwork Reverie
 
 Hello, this will be a 2D and 3D game engine made from scratch, with as few
 libraries as possible.

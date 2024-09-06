@@ -15,7 +15,7 @@ import engine.math;
 import engine.math.coordinate;
 import engine.math.utils;
 
-export namespace FunEngine::Math {
+export namespace ClockworkReverie::Math {
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
 struct Vector : Coordinate<TYPE, SIZE> {
   std::array<TYPE, SIZE> values{};
@@ -90,7 +90,7 @@ struct Vector : Coordinate<TYPE, SIZE> {
       return this == other;
     else
       for (size_t i; i < SIZE; i++)
-        if (!FunEngine::Math::approximately<TYPE>(values[i], other[i],
+        if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
                                                   tolerance))
           return false;
 
@@ -150,4 +150,4 @@ struct Vector4 final : Vector<TYPE, 4>, Coordinate4<TYPE> {
   void set_z(TYPE value) { this->values[2] = value; }
   void set_w(TYPE value) { this->values[3] = value; }
 };
-} // namespace FunEngine::Math
+} // namespace ClockworkReverie::Math

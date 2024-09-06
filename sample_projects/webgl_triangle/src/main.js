@@ -1,7 +1,7 @@
 import { asyncRun } from "./py-worker.js";
 
 const script = `
-from FunEnginePy.math import Vector3Int
+from clockwork_reverie_py.math import Vector3Int
 Vector3Int(55, 12, 32).magnitude()
 `;
 

@@ -1,6 +1,6 @@
 export module engine.graphics;
 
 
-export namespace FunEngine::Graphics {
+export namespace ClockworkReverie::Graphics {
   class Window {};
-} // namespace FunEngine:: Graphics
+} // namespace ClockworkReverie:: Graphics
