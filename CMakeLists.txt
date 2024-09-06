@@ -15,7 +15,7 @@ option(USE_SDL_SUBMODULE "Use SDL from git in submodules" ON)
 include_directories(include)
 include_directories(submodules/shadercross)
 
-add_compile_options(-fno-stack-protector -fno-fast-math)
+add_compile_options(-fno-stack-protector -fno-fast-math  -fPIC)
 
 if(EMSCRIPTEN)
   set(ENGINE_STATIC ON)
@@ -41,7 +41,7 @@ target_sources(${SKBUILD_PROJECT_NAME}
   PUBLIC
     FILE_SET CXX_MODULES FILES
       src/graphics/window.ixx
-      src/fun_engine.ixx
+      src/main.ixx
 
       src/math/math.ixx
       src/math/utils.ixx
@@ -60,7 +60,7 @@ if(EMSCRIPTEN)
 endif()
 
 if(ENGINE_PYTHON_BINDINGS)
-  set(PY_MODULE ${SKBUILD_PROJECT_NAME}Py)
+  set(PY_MODULE ${SKBUILD_PROJECT_NAME}_py)
   find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
   # execute_process(
@@ -71,7 +71,7 @@ if(ENGINE_PYTHON_BINDINGS)
   message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
   message(STATUS "Python_VERSION: ${Python_VERSION}")
 
-  nanobind_add_module(${PY_MODULE} python_module/main_python.cpp)
+  nanobind_add_module(${PY_MODULE} NB_STATIC python_module/main_python.cpp)
 
   target_compile_options(${PY_MODULE} PRIVATE -Wall)
 

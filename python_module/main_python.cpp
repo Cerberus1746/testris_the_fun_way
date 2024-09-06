@@ -1,15 +1,18 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 
+import engine;
 import engine.graphics;
 import engine.math;
 import engine.math.utils;
 import engine.math.vectors;
 
 namespace nb = nanobind;
+using namespace nb::literals;
 
-namespace math = FunEngine::Math;
-namespace graphics = FunEngine::Graphics;
+namespace reverie = ClockworkReverie;
+namespace math = reverie::Math;
+namespace graphics = reverie::Graphics;
 
 template <math::Numeric TYPE>
 void declare_vector2(nb::module_ &m, const std::string &type_name) {
@@ -98,9 +101,17 @@ void declare_vector4(nb::module_ &m, const std::string &type_name) {
       .def("magnitude", &Class::magnitude);
 }
 
-NB_MODULE(FunEnginePy, m) {
-  /*nb::class_<fun::EngineObject>(m, "EngineObject")
+NB_MODULE(clockwork_reverie_py, m) {
+  /*nb::class_<reverie::EngineObject>(m, "EngineObject")
       .def(nb::init<const std::string &>());*/
+
+  nb::class_<reverie::Version>(m, "Version")
+      .def(nb::init<int &, int &, int &>(), nb::arg("major"), nb::arg("minor"),
+           nb::arg("patch"));
+
+  nb::class_<reverie::Main>(m, "Main").def(
+      nb::init<std::string &, reverie::Version &>(), nb::arg("name"),
+      nb::arg("version"));
 
   auto math_module = m.def_submodule("math");
 

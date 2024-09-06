@@ -2,7 +2,7 @@
 import matrix;
 import <typeinfo>;
 
-export namespace FunEngine::Math {
+export namespace ClockworkReverie::Math {
 template <typename TYPE = double>
 class Matrix2x2 final : public Matrix<TYPE, 2, 2> {
 public:
@@ -33,4 +33,4 @@ public:
     return result;
   }
 };
-} // namespace FunEngine::Math
+} // namespace ClockworkReverie::Math

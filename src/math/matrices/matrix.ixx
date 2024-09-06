@@ -10,7 +10,7 @@ export module engine.math.matrix;
 
 import engine.math;
 
-export namespace FunEngine::Math {
+export namespace ClockworkReverie::Math {
 template <Numeric TYPE = double, size_t SIZE_X = 2, size_t SIZE_Y = 2>
 class Matrix {
 public:
@@ -45,4 +45,4 @@ public:
         set(x, y, x == y ? 1 : 0);
   }
 };
-} // namespace FunEngine::Math
+} // namespace ClockworkReverie::Math

@@ -1,9 +1,9 @@
 import Engine.si;
 
-export namespace FunEngine::SI {
+export namespace ClockworkReverie::SI {
 
 struct Seconds : Base {};
 struct Hours : Base {};
 struct EarthDays : Base {};
 struct EarthYears : Base {};
-} // namespace FunEngine::SI
+} // namespace ClockworkReverie::SI

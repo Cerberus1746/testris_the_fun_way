@@ -7,7 +7,7 @@ export module engine.math.coordinate;
 
 import engine.math;
 
-export namespace FunEngine::Math {
+export namespace ClockworkReverie::Math {
 template <Numeric TYPE, unsigned short int SIZE = 1> struct Coordinate {
   virtual ~Coordinate() {}
 
@@ -51,4 +51,4 @@ template <Numeric TYPE> struct Coordinate4 {
   virtual void set_z(TYPE value) = 0;
   virtual void set_w(TYPE value) = 0;
 };
-} // namespace FunEngine::Math
+} // namespace ClockworkReverie::Math

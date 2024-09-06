@@ -1,4 +1,4 @@
-from FunEnginePy import Main
+from clockwork_reverie_py import Main
 
 from .__version__ import __version__
 
