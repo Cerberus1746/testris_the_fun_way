@@ -16,7 +16,7 @@ jobs:
           # TODO: in the future check the availability of gcc version 14
           # Because currently, it is quite bad.
           #- gcc-14
-          - clang-18
+          - clang-18.1.3
         os:
           - windows-latest
           - ubuntu-latest
