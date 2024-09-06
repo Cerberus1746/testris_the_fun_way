@@ -80,7 +80,6 @@ jobs:
         uses: aminya/setup-cpp@v1
         with:
           compiler: clang-18
-          ninja: true
       - name: Install pyodide
         run: pip install pyodide-build==0.27.3
       - uses: mymindstorm/setup-emsdk@v14
