@@ -1,7 +1,7 @@
 import game_object;
 import matrix4x4;
 
-export namespace FunEngine {
+export namespace ClockworkReverie {
 class GameObject3d : public GameObject {
 public:
   Math::Matrix4x4<double> global_position;
@@ -10,4 +10,4 @@ public:
     global_position.set_position(x_axis, y_axis, z_axis);
   }
 };
-} // namespace FunEngine
+} // namespace ClockworkReverie

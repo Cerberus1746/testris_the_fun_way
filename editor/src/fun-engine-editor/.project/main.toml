@@ -1,0 +1,4 @@
+[project]
+name = "Clockwork Reverie Editor"
+version = "0.1.0"
+engine_version = ">=0.1.0"

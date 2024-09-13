@@ -1,19 +1,19 @@
+module;
+
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 
-import engine;
-import engine.graphics;
-import engine.math;
-import engine.math.utils;
-import engine.math.vectors;
+export module vectors;
+
+import clockwork_reverie.math.vectors;
+import clockwork_reverie.math.utils;
 
 namespace nb = nanobind;
-using namespace nb::literals;
 
 namespace reverie = ClockworkReverie;
 namespace math = reverie::Math;
-namespace graphics = reverie::Graphics;
 
+export namespace ClockworkReverie::Python {
 template <math::Numeric TYPE>
 void declare_vector2(nb::module_ &m, const std::string &type_name) {
   using Class = math::Vector2<TYPE>;
@@ -100,33 +100,4 @@ void declare_vector4(nb::module_ &m, const std::string &type_name) {
       .def("angle_to", &Class::angle_to)
       .def("magnitude", &Class::magnitude);
 }
-
-NB_MODULE(clockwork_reverie_py, m) {
-  /*nb::class_<reverie::EngineObject>(m, "EngineObject")
-      .def(nb::init<const std::string &>());*/
-
-  nb::class_<reverie::Version>(m, "Version")
-      .def(nb::init<int &, int &, int &>(), nb::arg("major"), nb::arg("minor"),
-           nb::arg("patch"));
-
-  nb::class_<reverie::Main>(m, "Main").def(
-      nb::init<std::string &, reverie::Version &>(), nb::arg("name"),
-      nb::arg("version"));
-
-  auto math_module = m.def_submodule("math");
-
-  math_module.def("approximately", &math::approximately<double>,
-                  "Compare two floating points together", nb::arg("left"),
-                  nb::arg("right"),
-                  nb::arg("tolerance") =
-                      std::numeric_limits<double>::epsilon());
-
-  declare_vector2<double>(math_module, "");
-  declare_vector2<int>(math_module, "Int");
-
-  declare_vector3<double>(math_module, "");
-  declare_vector3<int>(math_module, "Int");
-
-  declare_vector4<double>(math_module, "");
-  declare_vector4<int>(math_module, "Int");
-}
+} // namespace ClockworkReverie::Python

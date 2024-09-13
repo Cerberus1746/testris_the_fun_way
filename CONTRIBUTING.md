@@ -7,3 +7,6 @@
 * use `auto` where possible. It's ok, you will live.
 * We use C++ modules. So we have very few include files only when they are
  required
+* Python function names and classes must have the same as the C++ counterparts
+  same for the argument names, if they are different for any reason. It MUST be
+  specified in the documentation.

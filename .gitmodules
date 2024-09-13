@@ -7,3 +7,6 @@
 [submodule "submodules/shadercross"]
 	path = submodules/shadercross
 	url = git@github.com:flibitijibibo/SDL_gpu_shadercross.git
+[submodule "submodules/tomlplusplus"]
+	path = submodules/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus.git

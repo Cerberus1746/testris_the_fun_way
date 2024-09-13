@@ -2,8 +2,8 @@ import Engine.si;
 
 export namespace ClockworkReverie::SI {
 
-struct Seconds : Base {};
-struct Hours : Base {};
-struct EarthDays : Base {};
-struct EarthYears : Base {};
+struct Seconds {};
+struct Hours {};
+struct EarthDays {};
+struct EarthYears {};
 } // namespace ClockworkReverie::SI

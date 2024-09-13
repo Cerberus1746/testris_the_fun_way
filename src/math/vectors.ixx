@@ -1,3 +1,7 @@
+/**
+ * @brief Vector classes
+ *
+ */
 module;
 
 #include <array>
@@ -9,20 +13,32 @@ module;
 
 #include "constants.hpp"
 
-export module engine.math.vectors;
+export module clockwork_reverie.math.vectors;
 
-import engine.math;
-import engine.math.coordinate;
-import engine.math.utils;
+import clockwork_reverie.math.cartesian;
+import clockwork_reverie.math.utils;
 
 export namespace ClockworkReverie::Math {
-template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Vector : Coordinate<TYPE, SIZE> {
-  std::array<TYPE, SIZE> values{};
 
+/**
+ * @brief Base Cartesian vector
+ *
+ * @tparam Numeric TYPE float in Python.
+ * @tparam SIZE
+ */
+template <Numeric TYPE = double, unsigned short int SIZE = 1>
+struct Vector : Cartesian<TYPE, SIZE> {
+  std::array<TYPE, SIZE> values;
+
+  /**
+  * @brief get a number by it's index
+  *
+  * @param idx
+  * @return Numeric TYPE& float in Python
+  */
   TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
-  const bool operator==(Coordinate<TYPE, SIZE> &other) {
+  const bool operator==(Cartesian<TYPE, SIZE> &other) {
     if (typeid(TYPE) != typeid(int))
       throw std::logic_error("You can only compare vectors of type int, for "
                              "other types use approximately");
@@ -99,7 +115,7 @@ struct Vector : Coordinate<TYPE, SIZE> {
 };
 
 template <Numeric TYPE = double>
-struct Vector2 final : Vector<TYPE, 2>, Coordinate2<TYPE> {
+struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
   Vector2(TYPE x_axis, TYPE y_axis) {
     set_x(x_axis);
     set_y(y_axis);
@@ -115,7 +131,7 @@ struct Vector2 final : Vector<TYPE, 2>, Coordinate2<TYPE> {
 };
 
 template <Numeric TYPE = double>
-struct Vector3 final : Vector<TYPE, 3>, Coordinate3<TYPE> {
+struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
   Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
     set_x(x_axis);
     set_y(y_axis);
@@ -132,7 +148,7 @@ struct Vector3 final : Vector<TYPE, 3>, Coordinate3<TYPE> {
 };
 
 template <typename TYPE = double>
-struct Vector4 final : Vector<TYPE, 4>, Coordinate4<TYPE> {
+struct Vector4 final : Vector<TYPE, 4>, Cartesian4<TYPE> {
   Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
     set_x(x_axis);
     set_y(y_axis);
