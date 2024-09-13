@@ -23,3 +23,20 @@ libraries as possible.
 Why?
 For learning purposes and because so far the majority of game engines I used
 let me down somewhat.
+
+# FAQ
+
+1. Is this engine ready to use?
+
+   R: Absolutely not, and will not be for a couple years yet.
+
+2. Why Python? Python is slow!
+
+   R: Is it really? I have seen code that is quicker to execute in Python than
+   in C++, it depends completely in how you code, and since the engine itself
+   is entirely made with C++, any performance bottle necks coming from Python
+   gets diminished quite a bit.
+
+3. Anyone can see my source code with Python!
+
+   R: You can create your game with C++ too if you'd like.

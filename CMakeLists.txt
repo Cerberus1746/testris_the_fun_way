@@ -8,8 +8,8 @@ set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(ENGINE_PYTHON_BINDINGS "" ON)
-option(ENGINE_STATIC "" ON)
+option(ENGINE_PYTHON_BINDINGS "Create the python bindings" ON)
+option(ENGINE_STATIC "Build SDL and the engine statically" ON)
 option(USE_SDL_SUBMODULE "Use SDL from git in submodules" ON)
 
 include_directories(include)
@@ -31,25 +31,30 @@ else()
   add_library(${SKBUILD_PROJECT_NAME} SHARED)
 endif()
 
+add_subdirectory(submodules/tomlplusplus)
+
 if(USE_SDL_SUBMODULE)
     add_subdirectory(submodules/sdl)
 else()
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
+  if(ENGINE_STATIC)
+    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-static)
+  else()
+    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-dynamic)
+  endif()
 endif()
 
 target_sources(${SKBUILD_PROJECT_NAME}
   PUBLIC
-    FILE_SET CXX_MODULES FILES
-      src/graphics/window.ixx
+    FILE_SET all_modules TYPE CXX_MODULES FILES
+      src/utils.ixx
       src/main.ixx
 
-      src/math/math.ixx
+      src/math/coordinates/cartesian.ixx
+
       src/math/utils.ixx
-
-      src/math/coordinates.ixx
+      src/math/matrix.ixx
+      src/math/math.ixx
       src/math/vectors.ixx
-
-      src/math/matrices/matrix.ixx
 )
 
 target_compile_options(${SKBUILD_PROJECT_NAME} PRIVATE -Wall)
@@ -71,7 +76,13 @@ if(ENGINE_PYTHON_BINDINGS)
   message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
   message(STATUS "Python_VERSION: ${Python_VERSION}")
 
-  nanobind_add_module(${PY_MODULE} NB_STATIC python_module/main_python.cpp)
+  nanobind_add_module(${PY_MODULE} NB_STATIC src/python_module/main.cpp)
+
+  target_sources(${PY_MODULE}
+    PUBLIC
+      FILE_SET all_modules TYPE CXX_MODULES FILES
+        src/python_module/vectors.ixx
+  )
 
   target_compile_options(${PY_MODULE} PRIVATE -Wall)
 

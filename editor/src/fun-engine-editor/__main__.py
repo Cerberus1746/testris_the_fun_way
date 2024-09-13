@@ -8,3 +8,4 @@ software: dict[str, str | int] = {
 }
 
 main_instance: Main = Main(**software)
+main_instance.create_window()

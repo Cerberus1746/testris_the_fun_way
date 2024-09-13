@@ -2,7 +2,7 @@ module;
 
 #include "SDL3/SDL_gpu.h"
 
-export module engine.graphics.sdl;
+export module clockwork_reverie.graphics.sdl;
 
 namespace ClockworkReverie::Backends::SDL {
 struct SDL3GraphicDevice {
