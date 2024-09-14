@@ -48,13 +48,19 @@ target_sources(${SKBUILD_PROJECT_NAME}
     FILE_SET all_modules TYPE CXX_MODULES FILES
       src/utils.ixx
       src/main.ixx
-
-      src/math/coordinates/cartesian.ixx
-
       src/math/utils.ixx
       src/math/matrix.ixx
       src/math/math.ixx
       src/math/vectors.ixx
+
+      src/math/geometry/geometry.ixx
+      src/math/geometry/basic_shapes.ixx
+
+      src/graphics/window.ixx
+
+      src/math/coordinates/cartesian.ixx
+
+
 )
 
 target_compile_options(${SKBUILD_PROJECT_NAME} PRIVATE -Wall)

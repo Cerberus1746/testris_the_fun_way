@@ -31,11 +31,11 @@ struct Vector : Cartesian<TYPE, SIZE> {
   std::array<TYPE, SIZE> values;
 
   /**
-  * @brief get a number by it's index
-  *
-  * @param idx
-  * @return Numeric TYPE& float in Python
-  */
+   * @brief get a number by it's index
+   *
+   * @param idx
+   * @return Numeric TYPE& float in Python
+   */
   TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
   const bool operator==(Cartesian<TYPE, SIZE> &other) {
@@ -107,14 +107,14 @@ struct Vector : Cartesian<TYPE, SIZE> {
     else
       for (size_t i; i < SIZE; i++)
         if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
-                                                  tolerance))
+                                                         tolerance))
           return false;
 
     return true;
   }
 };
 
-template <Numeric TYPE = double>
+NUMERIC_TEMPLATE
 struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
   Vector2(TYPE x_axis, TYPE y_axis) {
     set_x(x_axis);
@@ -130,7 +130,7 @@ struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
   double angle() { return atan2(this->values[1], this->values[0]); }
 };
 
-template <Numeric TYPE = double>
+NUMERIC_TEMPLATE
 struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
   Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
     set_x(x_axis);
@@ -147,7 +147,7 @@ struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
   void set_z(TYPE value) { this->values[2] = value; }
 };
 
-template <typename TYPE = double>
+NUMERIC_TEMPLATE
 struct Vector4 final : Vector<TYPE, 4>, Cartesian4<TYPE> {
   Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
     set_x(x_axis);

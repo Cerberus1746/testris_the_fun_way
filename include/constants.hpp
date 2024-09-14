@@ -20,3 +20,4 @@
 #endif
 
 #define ParentMatrix Matrix<TYPE, SIZE_X, SIZE_Y>
+#define NUMERIC_TEMPLATE template <Numeric TYPE = double>
