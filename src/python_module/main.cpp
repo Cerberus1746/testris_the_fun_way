@@ -22,13 +22,14 @@ NB_MODULE(clockwork_reverie_py, m) {
   /*nb::class_<reverie::EngineObject>(m, "EngineObject")
       .def(nb::init<const std::string &>());*/
   nb::class_<reverie::Main>(m, "Main").def(
-      nb::init<std::string &, utils::Version &>(), "name"_a, "version"_a);
+      nb::init<const char *, utils::Version *>(), "name"_a, "version"_a);
 
   {
     auto py_utils = m.def_submodule("utils");
 
     nb::class_<utils::Version>(py_utils, "Version")
-        .def(nb::init<int &, int &, int &>(), "major"_a, "minor"_a, "patch"_a);
+        .def(nb::init<int &, int &, int &>(), "major"_a, "minor"_a, "patch"_a)
+        .def(nb::init<std::string &>(), "version_string"_a);
   }
 
   {

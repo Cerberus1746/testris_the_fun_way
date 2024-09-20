@@ -5,6 +5,7 @@ module;
 
 #include <SDL3/SDL.h>
 
+#include <memory>
 #include <string>
 #include <variant>
 
@@ -19,14 +20,60 @@ namespace geometry = ClockworkReverie::Math::Geometry;
 export namespace ClockworkReverie {
 struct Main final {
 private:
+  Utils::Version *version;
+  const char *name;
+  SDL_Event event;
+  SDL_GPUDevice *device;
   bool is_running;
 
-  SDL_GPUDevice *device;
-  SDL_Event event;
+  Graphics::Window *main_window;
+
+  // SDL_Event event;
+  // bool is_running;
 
 public:
-  std::string name;
-  Utils::Version version;
+  Main(const char *name, Utils::Version *version)
+      : version(version), name(name) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+      SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
+      throw;
+    }
+
+    device = SDL_CreateGPUDevice(SDL_ShaderCross_GetSPIRVShaderFormats(),
+                                 SDL_TRUE, nullptr);
+    if (device == nullptr) {
+      SDL_Log("GPUCreateDevice failed");
+      throw;
+    }
+
+    geometry::Size2d<unsigned short int> size(800, 600);
+
+    Graphics::Window window(name, &size, device, SDL_WINDOW_VULKAN);
+    this->main_window = &window;
+
+    is_running = true;
+    while (is_running) {
+      while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_EVENT_QUIT) {
+          is_running = false;
+          SDL_Log("Quit signal detected.");
+        } else if (event.type == SDL_EVENT_KEY_DOWN) {
+        }
+
+        if (!is_running)
+          break;
+      }
+    }
+    /*
+    auto vertex_shader = LoadShader(device, "RawTriangle.vert", 0, 0, 0, 0);
+    if (!vertex_shader) {
+      SDL_Log("Failed to create vertex shader!");
+      return;
+    }
+
+
+    */
+  }
 
   SDL_GPUShader *LoadShader(SDL_GPUDevice *device, const char *full_path,
                             Uint32 samplerCount, Uint32 uniformBufferCount,
@@ -73,45 +120,6 @@ public:
 
     SDL_free(code);
     return shader;
-  }
-
-  Main(std::string name,
-       std::variant<const Utils::Version, const std::string> version) {
-    if (std::holds_alternative<const std::string>(version))
-      this->version =
-          Utils::Version::from_string(std::get<const std::string>(version));
-    else
-      this->version = std::get<const Utils::Version>(version);
-
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-      SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
-      return;
-    }
-
-    device = SDL_CreateGPUDevice(SDL_ShaderCross_GetSPIRVShaderFormats(),
-                                 SDL_TRUE, NULL);
-    if (device == NULL) {
-      SDL_Log("GPUCreateDevice failed");
-      return;
-    }
-
-    auto size = geometry::Size2d<unsigned short int>(800, 600);
-
-    Graphics::Window("Clockwork Reverie", size, device, SDL_WINDOW_VULKAN);
-
-    /*
-    auto vertex_shader = LoadShader(device, "RawTriangle.vert", 0, 0, 0, 0);
-    if (!vertex_shader) {
-      SDL_Log("Failed to create vertex shader!");
-      return;
-    }
-
-    is_running = true;
-    while (!is_running) {
-      while (SDL_PollEvent(&event)) {
-      }
-    }
-    */
   }
 };
 } // namespace ClockworkReverie

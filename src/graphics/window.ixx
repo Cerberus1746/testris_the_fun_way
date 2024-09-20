@@ -1,6 +1,6 @@
 module;
 
-#include <string>
+#include <memory>
 #include <vector>
 
 #include <SDL3/SDL.h>
@@ -11,48 +11,56 @@ import clockwork_reverie.math.utils;
 import clockwork_reverie.math.geometry.basic_shapes;
 
 namespace geometry = ClockworkReverie::Math::Geometry;
-
 export namespace ClockworkReverie::Graphics {
-
-class Window {
-  static SDL_Window *main_window;
-
-  std::vector<SDL_Window *> child_windows;
-
-  SDL_GPUDevice *device;
-  geometry::Size2d<unsigned short int> size;
+class SDLWindow {
+  SDL_Window *window;
 
 public:
-  ~Window() {
-    SDL_DestroyWindow(main_window);
-
-    for (auto curr_window : child_windows)
-      SDL_DestroyWindow(curr_window);
-  }
-
-  Window(const std::string &title, geometry::Size2d<unsigned short int> &size,
-         SDL_GPUDevice *device, SDL_WindowFlags flags) {
-    this->device = device;
-    this->size = size;
-
-    auto c_title = title.c_str();
-
-    main_window = SDL_CreateWindow(c_title, size.x_axis, size.y_axis, flags);
-
-    if (!main_window) {
+  SDLWindow(const char *title, int width, int height, SDL_WindowFlags flags)
+      : window(SDL_CreateWindow(title, width, height, flags)) {
+    if (window == nullptr) {
       SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create window: %s\n",
                    SDL_GetError());
-      return;
+      throw;
     }
+    SDL_Log("SDLWindow created");
+  }
 
-    if (!SDL_ClaimWindowForGPUDevice(device, main_window)) {
+  ~SDLWindow() {
+    SDL_DestroyWindow(window);
+    SDL_Log("SDLWindow Destroyed");
+  }
+
+  auto get() { return window; }
+};
+
+struct Window {
+  SDLWindow window;
+  Window *parent;
+  std::vector<Window> children;
+
+  const char *title;
+  SDL_GPUDevice *device;
+
+  ~Window() {
+    children.clear();
+    release_from_device();
+    SDL_Log("Window Destroyed");
+  }
+
+  Window(const char *title, geometry::Size2d<unsigned short int> *size,
+         SDL_GPUDevice *device, SDL_WindowFlags flags)
+      : window(title, size->get_width(), size->get_height(), flags),
+        title(title), device(device) {
+
+    if (!SDL_ClaimWindowForGPUDevice(device, window.get())) {
       SDL_Log("GPUClaimWindow failed");
-      return;
+      throw;
     }
   }
 
-  auto get_main_window() { return main_window; }
+  void release_from_device() {
+    SDL_ReleaseWindowFromGPUDevice(device, window.get());
+  }
 };
-
-SDL_Window *Window::main_window = nullptr;
 } // namespace ClockworkReverie::Graphics

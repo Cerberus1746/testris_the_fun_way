@@ -6,6 +6,7 @@
 module;
 
 #include <string>
+
 #include "constants.hpp"
 
 export module clockwork_reverie.math.cartesian;
@@ -17,11 +18,11 @@ template <Numeric TYPE, unsigned short int SIZE = 1> struct Cartesian {
   virtual ~Cartesian() {}
 
   virtual TYPE &operator[](unsigned short int idx) = 0;
-  virtual const bool operator==(Cartesian<TYPE, SIZE> &other) = 0;
+  virtual bool operator==(Cartesian<TYPE, SIZE> &other) = 0;
   virtual std::string to_string() = 0;
 };
 
-template <Numeric TYPE> struct Cartesian2 {
+NUMERIC_TEMPLATE struct Cartesian2 {
   virtual ~Cartesian2() {}
 
   virtual TYPE get_x() const = 0;

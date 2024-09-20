@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ON)
 
 option(ENGINE_PYTHON_BINDINGS "Create the python bindings" ON)
 option(ENGINE_STATIC "Build SDL and the engine statically" ON)
@@ -52,11 +53,13 @@ target_sources(${SKBUILD_PROJECT_NAME}
       src/math/matrix.ixx
       src/math/math.ixx
       src/math/vectors.ixx
+      src/math/points.ixx
+
+      src/graphics/mesh.ixx
+      src/graphics/window.ixx
 
       src/math/geometry/geometry.ixx
       src/math/geometry/basic_shapes.ixx
-
-      src/graphics/window.ixx
 
       src/math/coordinates/cartesian.ixx
 
