@@ -40,7 +40,7 @@ public:
     }
 
     device = SDL_CreateGPUDevice(SDL_ShaderCross_GetSPIRVShaderFormats(),
-                                 SDL_TRUE, nullptr);
+                                 true, nullptr);
     if (device == nullptr) {
       SDL_Log("GPUCreateDevice failed");
       throw;
@@ -110,12 +110,12 @@ public:
     };
 
     auto shader = static_cast<SDL_GPUShader *>(
-        SDL_ShaderCross_CompileFromSPIRV(device, &shaderInfo, SDL_FALSE));
+        SDL_ShaderCross_CompileFromSPIRV(device, &shaderInfo, false));
 
-    if (shader == NULL) {
+    if (shader == nullptr) {
       SDL_Log("Failed to create shader!");
       SDL_free(code);
-      return NULL;
+      return nullptr;
     }
 
     SDL_free(code);
