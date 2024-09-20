@@ -7,7 +7,8 @@ export module clockwork_reverie.utils;
 
 export namespace ClockworkReverie::Utils {
 /**
- * @brief This function is not exposed to Python, use `str.split()` instead
+ * @brief Split a string on delimiters
+ *        This function is not exposed to Python, use `str.split()` instead
  *
  * @param input_str
  * @param delimiter
@@ -17,15 +18,17 @@ auto explode(const std::string &input_str, const char &delimiter) {
   std::string next;
   std::vector<std::string> result;
 
-  for (auto iter = input_str.begin(); iter != input_str.end(); iter++) {
-    if (*iter == delimiter) {
+  for (auto curr_char : input_str) {
+    if (curr_char == delimiter) {
       if (!next.empty()) {
         result.push_back(next);
         next.clear();
       }
-    } else
-      next += *iter;
+    } else {
+      next += curr_char;
+    }
   }
+
   if (!next.empty())
     result.push_back(next);
 
@@ -39,11 +42,15 @@ struct Version final {
 
   auto operator<=>(const Version &) const = default;
 
-  static Version from_string(const std::string str) {
-    auto splitted = explode(str, '.');
+  Version(const int major, const int minor, const int patch)
+      : major(major), minor(minor), patch(patch) {}
 
-    return Version(std::stoi(splitted[0]), std::stoi(splitted[1]),
-                   std::stoi(splitted[2]));
+  Version(const std::string &version_string) {
+    auto splitted = explode(version_string, '.');
+
+    major = std::stoi(splitted[0]);
+    minor = std::stoi(splitted[1]);
+    patch = std::stoi(splitted[2]);
   }
 };
 } // namespace ClockworkReverie::Utils

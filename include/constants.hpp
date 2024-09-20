@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_HPP
+#define CONSTANTS_HPP
+
 #define int_id typeid(int)
 #define float_id typeid(float)
 #define double_id typeid(double)
@@ -20,4 +23,6 @@
 #endif
 
 #define ParentMatrix Matrix<TYPE, SIZE_X, SIZE_Y>
-#define NUMERIC_TEMPLATE template <Numeric TYPE = double>
+#define NUMERIC_TEMPLATE                                                      \
+  template <ClockworkReverie::Math::Numeric TYPE = double>
+#endif

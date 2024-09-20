@@ -18,6 +18,7 @@ docs/
 .ipynb_checkpoints/
 __pycache__/
 *.egg-info/
+tmp/
 
 # subprojects
 subprojects/packagecache/

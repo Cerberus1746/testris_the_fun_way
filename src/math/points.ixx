@@ -1,5 +1,5 @@
 /**
- * @brief Vector classes
+ * @brief Point classes
  *
  */
 module;
@@ -13,7 +13,7 @@ module;
 
 #include "constants.hpp"
 
-export module clockwork_reverie.math.vectors;
+export module clockwork_reverie.math.points;
 
 import clockwork_reverie.math.cartesian;
 import clockwork_reverie.math.utils;
@@ -21,13 +21,13 @@ import clockwork_reverie.math.utils;
 export namespace ClockworkReverie::Math {
 
 /**
- * @brief Base Cartesian vector
+ * @brief Base Cartesian location, similar to vectors but more basic
  *
  * @tparam Numeric TYPE float in Python.
  * @tparam SIZE
  */
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Vector : Cartesian<TYPE, SIZE> {
+struct Point : Cartesian<TYPE, SIZE> {
   std::array<TYPE, SIZE> values;
 
   /**
@@ -38,74 +38,42 @@ struct Vector : Cartesian<TYPE, SIZE> {
    */
   TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
-  bool operator==(Cartesian<TYPE, SIZE> &other) {
+  const bool operator==(Cartesian<TYPE, SIZE> &other) {
     if (typeid(TYPE) != typeid(int))
       throw std::logic_error("You can only compare vectors of type int, for "
                              "other types use approximately");
     for (unsigned short int i = 0; i < SIZE; i++)
       if (values[i] != other[i])
         return false;
+
     return true;
   }
 
   std::string to_string() {
-    std::string vec_str;
+    std::string name;
+
     if (typeid(TYPE) == typeid(int))
-      vec_str = std::format("Vector{}Int(", SIZE);
+      name = std::format("Point{}Int(", SIZE);
     else
-      vec_str = std::format("Vector{}(", SIZE);
+      name = std::format("Point{}(", SIZE);
 
     for (size_t i = 0; i < SIZE; i++) {
-      vec_str += std::to_string(values[i]);
+      name += std::to_string(values[i]);
       if (i < SIZE - 1)
-        vec_str += ", ";
+        name += ", ";
     }
 
-    vec_str += ")";
-    return vec_str;
+    name += ")";
+    return name;
   }
 
-  /// multiply elements one by one
-  FORCE_INLINE auto pi_notation() {
-    auto curr_value = values[0];
-
-    if (SIZE == 1)
-      return curr_value;
-
-    for (size_t i = 1; i < SIZE; i++)
-      curr_value *= values[i];
-
-    return curr_value;
-  }
-
-  FORCE_INLINE auto magnitude() const {
-    double curr_sum = 0;
-
-    for (auto curr_value : values)
-      curr_sum += pow(curr_value, 2);
-
-    return sqrt(curr_sum);
-  }
-
-  /// magnitude, but clamped to speed of light
-  FORCE_INLINE auto velocity() {
-    auto mag = magnitude();
-    return mag < LIGHT_SPEED ? mag : LIGHT_SPEED;
-  }
-
-  FORCE_INLINE auto angle_to(Vector<TYPE, SIZE> to) {
-    auto sums = this->pi_notation() + to.pi_notation();
-    auto magnitudes = this->magnitude() * to.magnitude();
-    return acos(sums / magnitudes);
-  }
-
-  FORCE_INLINE auto
-  approximately(Vector<TYPE, SIZE> other,
+  FORCE_INLINE bool
+  approximately(Point<TYPE, SIZE> other,
                 TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
     if (typeid(TYPE) == int_id)
       return this == other;
     else
-      for (unsigned short int i = 0; i < SIZE; i++)
+      for (size_t i; i < SIZE; i++)
         if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
                                                          tolerance))
           return false;
@@ -115,8 +83,8 @@ struct Vector : Cartesian<TYPE, SIZE> {
 };
 
 NUMERIC_TEMPLATE
-struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
-  Vector2(TYPE x_axis, TYPE y_axis) {
+struct Point2 final : Point<TYPE, 2>, Cartesian2<TYPE> {
+  Point2(TYPE x_axis, TYPE y_axis) {
     set_x(x_axis);
     set_y(y_axis);
   }
@@ -127,12 +95,11 @@ struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
   void set_x(TYPE value) { this->values[0] = value; }
   void set_y(TYPE value) { this->values[1] = value; }
 
-  double angle() { return atan2(this->values[1], this->values[0]); }
 };
 
 NUMERIC_TEMPLATE
-struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
-  Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
+struct Point3 final : Point<TYPE, 3>, Cartesian3<TYPE> {
+  Point3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);
@@ -148,8 +115,8 @@ struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
 };
 
 NUMERIC_TEMPLATE
-struct Vector4 final : Vector<TYPE, 4>, Cartesian4<TYPE> {
-  Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
+struct Point4 final : Point<TYPE, 4>, Cartesian4<TYPE> {
+  Point4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);
