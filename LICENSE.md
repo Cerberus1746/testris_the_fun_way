@@ -1,22 +1,20 @@
 We are currently researching the best possible license for this project.
 But for now, we have the following terms:
 
-* You are not allowed to use any snippets, code or whatever of this project to
-  train generative AI like co-pilot, chat-gpt or whatever other copy cats might
-  appear.
+1. The Software and any modifications made to it may not be used for the purpose of training or improving machine learning algorithms,
+including but not limited to artificial intelligence, natural language processing, or data mining. This condition applies to any derivatives,
+modifications, or updates based on the Software code. Any usage of the Software in an AI-training dataset is considered a breach of this License.
 
-  This includes forks or variations of this project. And ANY SOFTWARE made with
-  this project
-* You are not allowed to use the engine, or any parts of this software
-  for generative AI or create any software that uses them in any shape or form.
-  That includes using images made with stable diffusion, create AI generated
-  voice acting, generated music and etc.
+2. The Software may not be included in any dataset used for training or improving machine learning algorithms,
+including but not limited to artificial intelligence, natural language processing, or data mining.
 
-  You are also not allowed to use any code from generative AI to create your
-  games.
+3. Any person or organization found to be in violation of these restrictions will be subject to legal action and may be held liable
+for any damages resulting from such use.
 
-  This includes forks or variations of this project.
-* Keep in mind that not all AI tools are banned.
+4. You are not allowed to use the engine, or any parts of this software for generative AI or create any software that uses them in any shape or form.
+That includes using images made with stable diffusion, create AI generated voice acting, generated music and etc.
 
-If you fork or reuse anything from this project you are required to abide by
-the terms above
+   You are also not allowed to use any code from generative AI to create your games.
+
+   Only AI generative tools that create things from nothing are not allowed to be used. Tools that assist the creation of art, code and etc are allowed to
+   be used.
