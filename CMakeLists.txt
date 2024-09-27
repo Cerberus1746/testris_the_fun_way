@@ -52,8 +52,10 @@ target_sources(${SKBUILD_PROJECT_NAME}
       src/math/utils.ixx
       src/math/matrix.ixx
       src/math/math.ixx
-      src/math/vectors.ixx
-      src/math/points.ixx
+
+      src/math/coordinates/cartesian.ixx
+      src/math/coordinates/vectors.ixx
+      src/math/coordinates/points.ixx
 
       src/graphics/mesh.ixx
       src/graphics/window.ixx
@@ -61,7 +63,6 @@ target_sources(${SKBUILD_PROJECT_NAME}
       src/math/geometry/geometry.ixx
       src/math/geometry/basic_shapes.ixx
 
-      src/math/coordinates/cartesian.ixx
 
 
 )

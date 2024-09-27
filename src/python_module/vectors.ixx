@@ -15,10 +15,10 @@ namespace math = reverie::Math;
 
 export namespace ClockworkReverie::Python {
 template <math::Numeric TYPE>
-void declare_vector2(nb::module_ &m, const std::string &type_name) {
-  using Class = math::Vector2<TYPE>;
-  std::string pyclass_name = (std::string) "Vector2" + type_name;
-  nb::class_<Class>(m, pyclass_name.c_str())
+void declare_vector2(nb::module_ &py_module, const std::string &type_name) {
+  using Class = math::Vector<TYPE, 2>;
+  std::string pyclass_name = std::string("Vector2" + type_name);
+  nb::class_<Class>(py_module, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &>())
       // Data
       .def("__repr__", &Class::to_string)
@@ -41,10 +41,10 @@ void declare_vector2(nb::module_ &m, const std::string &type_name) {
 }
 
 template <math::Numeric TYPE>
-void declare_vector3(nb::module_ &m, const std::string &type_name) {
-  using Class = math::Vector3<TYPE>;
+void declare_vector3(nb::module_ &py_module, const std::string &type_name) {
+  using Class = math::Vector<TYPE, 3>;
   std::string pyclass_name = (std::string) "Vector3" + type_name;
-  nb::class_<Class>(m, pyclass_name.c_str())
+  nb::class_<Class>(py_module, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &, TYPE &>())
 
       // Data
@@ -70,10 +70,10 @@ void declare_vector3(nb::module_ &m, const std::string &type_name) {
 }
 
 template <math::Numeric TYPE>
-void declare_vector4(nb::module_ &m, const std::string &type_name) {
-  using Class = math::Vector4<TYPE>;
+void declare_vector4(nb::module_ &py_module, const std::string &type_name) {
+  using Class = math::Vector<TYPE, 4>;
   std::string pyclass_name = (std::string) "Vector4" + type_name;
-  nb::class_<Class>(m, pyclass_name.c_str())
+  nb::class_<Class>(py_module, pyclass_name.c_str())
       .def(nb::init<TYPE &, TYPE &, TYPE &, TYPE &>())
 
       // Data

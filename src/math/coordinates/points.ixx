@@ -27,7 +27,7 @@ export namespace ClockworkReverie::Math {
  * @tparam SIZE
  */
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Point : Cartesian<TYPE, SIZE> {
+struct PointBase {
   std::array<TYPE, SIZE> values;
 
   /**
@@ -38,7 +38,7 @@ struct Point : Cartesian<TYPE, SIZE> {
    */
   TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
-  const bool operator==(Cartesian<TYPE, SIZE> &other) {
+  const bool operator==(CartesianBase<TYPE, SIZE> &other) {
     if (typeid(TYPE) != typeid(int))
       throw std::logic_error("You can only compare vectors of type int, for "
                              "other types use approximately");
@@ -68,23 +68,26 @@ struct Point : Cartesian<TYPE, SIZE> {
   }
 
   FORCE_INLINE bool
-  approximately(Point<TYPE, SIZE> other,
+  approximately(CartesianBase<TYPE, SIZE> other,
                 TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
     if (typeid(TYPE) == int_id)
       return this == other;
-    else
-      for (size_t i; i < SIZE; i++)
-        if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
-                                                         tolerance))
-          return false;
+
+    for (size_t i; i < SIZE; i++)
+      if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
+                                                       tolerance))
+        return false;
 
     return true;
   }
 };
 
+template <Numeric TYPE = double, unsigned short int SIZE = 1>
+struct Point : PointBase<TYPE, SIZE>, Cartesian<TYPE, SIZE> {};
+
 NUMERIC_TEMPLATE
-struct Point2 final : Point<TYPE, 2>, Cartesian2<TYPE> {
-  Point2(TYPE x_axis, TYPE y_axis) {
+struct Point<TYPE, 2> : PointBase<TYPE, 2>, Cartesian<TYPE, 2> {
+  Point(TYPE x_axis, TYPE y_axis) {
     set_x(x_axis);
     set_y(y_axis);
   }
@@ -94,12 +97,11 @@ struct Point2 final : Point<TYPE, 2>, Cartesian2<TYPE> {
 
   void set_x(TYPE value) { this->values[0] = value; }
   void set_y(TYPE value) { this->values[1] = value; }
-
 };
 
 NUMERIC_TEMPLATE
-struct Point3 final : Point<TYPE, 3>, Cartesian3<TYPE> {
-  Point3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
+struct Point<TYPE, 3> : PointBase<TYPE, 3>, Cartesian<TYPE, 3> {
+  Point(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);
@@ -115,8 +117,8 @@ struct Point3 final : Point<TYPE, 3>, Cartesian3<TYPE> {
 };
 
 NUMERIC_TEMPLATE
-struct Point4 final : Point<TYPE, 4>, Cartesian4<TYPE> {
-  Point4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
+struct Point<TYPE, 4> : PointBase<TYPE, 4>, Cartesian<TYPE, 4> {
+  Point(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);

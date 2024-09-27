@@ -26,8 +26,7 @@ export namespace ClockworkReverie::Math {
  * @tparam Numeric TYPE float in Python.
  * @tparam SIZE
  */
-template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Vector : Cartesian<TYPE, SIZE> {
+template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
   std::array<TYPE, SIZE> values;
 
   /**
@@ -38,10 +37,11 @@ struct Vector : Cartesian<TYPE, SIZE> {
    */
   TYPE &operator[](unsigned short int idx) { return values[idx]; }
 
-  bool operator==(Cartesian<TYPE, SIZE> &other) {
-    if (typeid(TYPE) != typeid(int))
+  bool operator==(CartesianBase<TYPE, SIZE> &other) {
+    if (typeid(TYPE) != typeid(int)) {
       throw std::logic_error("You can only compare vectors of type int, for "
                              "other types use approximately");
+    }
     for (unsigned short int i = 0; i < SIZE; i++)
       if (values[i] != other[i])
         return false;
@@ -93,30 +93,33 @@ struct Vector : Cartesian<TYPE, SIZE> {
     return mag < LIGHT_SPEED ? mag : LIGHT_SPEED;
   }
 
-  FORCE_INLINE auto angle_to(Vector<TYPE, SIZE> to) {
-    auto sums = this->pi_notation() + to.pi_notation();
-    auto magnitudes = this->magnitude() * to.magnitude();
+  FORCE_INLINE auto angle_to(VectorBase<TYPE, SIZE> other) {
+    auto sums = this->pi_notation() + other.pi_notation();
+    auto magnitudes = this->magnitude() * other.magnitude();
     return acos(sums / magnitudes);
   }
 
   FORCE_INLINE auto
-  approximately(Vector<TYPE, SIZE> other,
+  approximately(VectorBase<TYPE, SIZE> other,
                 TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
     if (typeid(TYPE) == int_id)
       return this == other;
-    else
-      for (unsigned short int i = 0; i < SIZE; i++)
-        if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
-                                                         tolerance))
-          return false;
+
+    for (unsigned short int i = 0; i < SIZE; i++)
+      if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
+                                                       tolerance))
+        return false;
 
     return true;
   }
 };
 
-NUMERIC_TEMPLATE
-struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
-  Vector2(TYPE x_axis, TYPE y_axis) {
+template <Numeric TYPE = double, unsigned short int SIZE = 1>
+struct Vector : VectorBase<TYPE, SIZE>, Cartesian<TYPE, SIZE> {};
+
+NUMERIC_TEMPLATE struct Vector<TYPE, 2> : VectorBase<TYPE, 2>,
+                                          Cartesian<TYPE, 2> {
+  Vector(TYPE x_axis, TYPE y_axis) {
     set_x(x_axis);
     set_y(y_axis);
   }
@@ -131,8 +134,8 @@ struct Vector2 final : Vector<TYPE, 2>, Cartesian2<TYPE> {
 };
 
 NUMERIC_TEMPLATE
-struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
-  Vector3(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
+struct Vector<TYPE, 3> : VectorBase<TYPE, 3>, Cartesian<TYPE, 3> {
+  Vector(TYPE x_axis, TYPE y_axis, TYPE z_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);
@@ -148,8 +151,8 @@ struct Vector3 final : Vector<TYPE, 3>, Cartesian3<TYPE> {
 };
 
 NUMERIC_TEMPLATE
-struct Vector4 final : Vector<TYPE, 4>, Cartesian4<TYPE> {
-  Vector4(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
+struct Vector<TYPE, 4> : VectorBase<TYPE, 4>, Cartesian<TYPE, 4> {
+  Vector(TYPE x_axis, TYPE y_axis, TYPE z_axis, TYPE w_axis) {
     set_x(x_axis);
     set_y(y_axis);
     set_z(z_axis);

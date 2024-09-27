@@ -10,7 +10,7 @@ import clockwork_reverie.math.points;
 import clockwork_reverie.math.utils;
 
 export namespace ClockworkReverie::Math::Geometry {
-NUMERIC_TEMPLATE struct Size2d {
+NUMERIC_TEMPLATE_W_DEFAULT struct Size2d {
   std::array<TYPE, 2> sizes;
 
   Size2d(TYPE width, TYPE height) {
@@ -24,7 +24,7 @@ NUMERIC_TEMPLATE struct Size2d {
   FORCE_INLINE TYPE get_length() { return sizes[1]; }
 };
 
-NUMERIC_TEMPLATE struct Size3d {
+NUMERIC_TEMPLATE_W_DEFAULT struct Size3d {
   std::array<TYPE, 3> sizes;
 
   FORCE_INLINE TYPE get_width() { return sizes[0]; }
@@ -32,5 +32,5 @@ NUMERIC_TEMPLATE struct Size3d {
   FORCE_INLINE TYPE get_height() { return sizes[2]; }
 };
 
-NUMERIC_TEMPLATE struct Rectangle {};
+NUMERIC_TEMPLATE_W_DEFAULT struct Rectangle {};
 } // namespace ClockworkReverie::Math::Geometry

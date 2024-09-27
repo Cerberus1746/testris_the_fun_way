@@ -23,6 +23,7 @@
 #endif
 
 #define ParentMatrix Matrix<TYPE, SIZE_X, SIZE_Y>
-#define NUMERIC_TEMPLATE                                                      \
+#define NUMERIC_TEMPLATE_W_DEFAULT                                            \
   template <ClockworkReverie::Math::Numeric TYPE = double>
+#define NUMERIC_TEMPLATE template <ClockworkReverie::Math::Numeric TYPE>
 #endif

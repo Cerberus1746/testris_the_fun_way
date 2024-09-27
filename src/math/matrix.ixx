@@ -96,9 +96,7 @@ public:
   TYPE *c2 = *this[2, 1];
   TYPE *c3 = *this[2, 2];
 
-  Vector2<TYPE> get_position() {
-    return Vector2<TYPE>(*this[3, 0], *this[3, 1]);
-  }
+  auto get_position() { return Vector<TYPE, 2>(*this[3, 0], *this[3, 1]); }
 
   TYPE get_determinant() {
     if (!this->cache.is_determinant_dirty)
@@ -112,7 +110,7 @@ public:
     this->cache.set_all_dirty();
   }
 
-  void set_position(Vector2<TYPE> &vector) {
+  void set_position(Vector<TYPE, 2> &vector) {
     (*this)[2, 0] = vector[0];
     (*this)[2, 1] = vector[1];
 
@@ -123,9 +121,9 @@ public:
 template <typename TYPE = double>
 class Matrix4x4 final : public Matrix<TYPE, 4, 4> {
 public:
-  Vector3<TYPE> get_position() {
-    return Vector3<TYPE>(this->values[3][0], this->values[3][1],
-                         this->values[3][2]);
+  auto get_position() {
+    return Vector<TYPE, 3>(this->values[3][0], this->values[3][1],
+                           this->values[3][2]);
   }
   /*
     TYPE get_determinant() {
@@ -139,7 +137,7 @@ public:
     this->set(3, 2, z_axis);
   }
 
-  void set_position(Vector3<TYPE> &vector) {
+  void set_position(Vector<TYPE, 3> &vector) {
     this->set(3, 0, vector[0]);
     this->set(3, 1, vector[1]);
     this->set(3, 2, vector[2]);
