@@ -4,10 +4,8 @@
  */
 module;
 
-#include <array>
 #include <cmath>
 #include <format>
-#include <stdexcept>
 #include <string>
 #include <typeinfo>
 
@@ -26,27 +24,8 @@ export namespace ClockworkReverie::Math {
  * @tparam Numeric TYPE float in Python.
  * @tparam SIZE
  */
-template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
-  std::array<TYPE, SIZE> values;
-
-  /**
-   * @brief get a number by it's index
-   *
-   * @param idx
-   * @return Numeric TYPE& float in Python
-   */
-  TYPE &operator[](unsigned short int idx) { return values[idx]; }
-
-  bool operator==(CartesianBase<TYPE, SIZE> &other) {
-    if (typeid(TYPE) != typeid(int)) {
-      throw std::logic_error("You can only compare vectors of type int, for "
-                             "other types use approximately");
-    }
-    for (unsigned short int i = 0; i < SIZE; i++)
-      if (values[i] != other[i])
-        return false;
-    return true;
-  }
+template <Numeric TYPE, unsigned short int SIZE>
+struct VectorBase : CartesianBase<TYPE, SIZE> {
 
   std::string to_string() {
     std::string vec_str;
@@ -56,7 +35,7 @@ template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
       vec_str = std::format("Vector{}(", SIZE);
 
     for (size_t i = 0; i < SIZE; i++) {
-      vec_str += std::to_string(values[i]);
+      vec_str += std::to_string(this->values[i]);
       if (i < SIZE - 1)
         vec_str += ", ";
     }
@@ -67,13 +46,13 @@ template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
 
   /// multiply elements one by one
   FORCE_INLINE auto pi_notation() {
-    auto curr_value = values[0];
+    auto curr_value = this->values[0];
 
     if (SIZE == 1)
       return curr_value;
 
     for (size_t i = 1; i < SIZE; i++)
-      curr_value *= values[i];
+      curr_value *= this->values[i];
 
     return curr_value;
   }
@@ -81,7 +60,7 @@ template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
   FORCE_INLINE auto magnitude() const {
     double curr_sum = 0;
 
-    for (auto curr_value : values)
+    for (auto curr_value : this->values)
       curr_sum += pow(curr_value, 2);
 
     return sqrt(curr_sum);
@@ -98,24 +77,10 @@ template <Numeric TYPE, unsigned short int SIZE> struct VectorBase {
     auto magnitudes = this->magnitude() * other.magnitude();
     return acos(sums / magnitudes);
   }
-
-  FORCE_INLINE auto
-  approximately(VectorBase<TYPE, SIZE> other,
-                TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
-    if (typeid(TYPE) == int_id)
-      return this == other;
-
-    for (unsigned short int i = 0; i < SIZE; i++)
-      if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
-                                                       tolerance))
-        return false;
-
-    return true;
-  }
 };
 
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Vector : VectorBase<TYPE, SIZE>, Cartesian<TYPE, SIZE> {};
+struct Vector : VectorBase<TYPE, SIZE> {};
 
 NUMERIC_TEMPLATE struct Vector<TYPE, 2> : VectorBase<TYPE, 2>,
                                           Cartesian<TYPE, 2> {

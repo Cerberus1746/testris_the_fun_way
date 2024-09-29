@@ -5,7 +5,7 @@
  */
 module;
 
-#include <string>
+#include <stdexcept>
 
 #include "constants.hpp"
 
@@ -15,18 +15,45 @@ import clockwork_reverie.math.utils;
 
 export namespace ClockworkReverie::Math {
 template <Numeric TYPE, unsigned short int SIZE = 1> struct CartesianBase {
-  virtual ~CartesianBase() {}
+  std::array<TYPE, SIZE> values;
 
-  virtual TYPE &operator[](unsigned short int idx) = 0;
-  virtual bool operator==(CartesianBase<TYPE, SIZE> &other) = 0;
-  virtual std::string to_string() = 0;
-  bool
+  /**
+   * @brief get a number by it's index
+   *
+   * @param idx
+   * @return Numeric TYPE&. `float` by default in Python
+   */
+  FORCE_INLINE virtual TYPE &operator[](unsigned short int idx) {
+    return values[idx];
+  }
+
+  bool operator==(CartesianBase<TYPE, SIZE> &other) {
+    if constexpr (std::is_same<TYPE, int>::value)
+      throw std::logic_error("You can only compare vectors of type int, for "
+                             "other types use approximately");
+
+    for (unsigned short int i = 0; i < SIZE; i++)
+      if (values[i] != other[i])
+        return false;
+
+    return true;
+  }
+
+  FORCE_INLINE auto
   approximately(CartesianBase<TYPE, SIZE> other,
-                TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) = 0;
+                TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
+    if constexpr (std::is_same<TYPE, int>::value)
+      return this == other;
+
+    for (unsigned short int i = 0; i < SIZE; i++)
+      if (!approximately<TYPE>(this->values[i], other[i], tolerance))
+        return false;
+
+    return true;
+  }
 };
 
-template <Numeric TYPE, unsigned short int SIZE = 1>
-struct Cartesian : CartesianBase<TYPE, SIZE> {};
+template <Numeric TYPE, unsigned short int SIZE = 1> struct Cartesian {};
 
 NUMERIC_TEMPLATE struct Cartesian<TYPE, 2> {
   virtual TYPE get_x() const = 0;

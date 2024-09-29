@@ -4,12 +4,8 @@
  */
 module;
 
-#include <array>
 #include <cmath>
 #include <format>
-#include <stdexcept>
-#include <string>
-#include <typeinfo>
 
 #include "constants.hpp"
 
@@ -27,38 +23,17 @@ export namespace ClockworkReverie::Math {
  * @tparam SIZE
  */
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct PointBase {
-  std::array<TYPE, SIZE> values;
-
-  /**
-   * @brief get a number by it's index
-   *
-   * @param idx
-   * @return Numeric TYPE& float in Python
-   */
-  TYPE &operator[](unsigned short int idx) { return values[idx]; }
-
-  const bool operator==(CartesianBase<TYPE, SIZE> &other) {
-    if (typeid(TYPE) != typeid(int))
-      throw std::logic_error("You can only compare vectors of type int, for "
-                             "other types use approximately");
-    for (unsigned short int i = 0; i < SIZE; i++)
-      if (values[i] != other[i])
-        return false;
-
-    return true;
-  }
-
+struct PointBase : CartesianBase<TYPE, SIZE> {
   std::string to_string() {
     std::string name;
 
-    if (typeid(TYPE) == typeid(int))
+    if constexpr (std::is_same<TYPE, int>::value)
       name = std::format("Point{}Int(", SIZE);
     else
       name = std::format("Point{}(", SIZE);
 
     for (size_t i = 0; i < SIZE; i++) {
-      name += std::to_string(values[i]);
+      name += std::to_string(this->values[i]);
       if (i < SIZE - 1)
         name += ", ";
     }
@@ -66,24 +41,10 @@ struct PointBase {
     name += ")";
     return name;
   }
-
-  FORCE_INLINE bool
-  approximately(CartesianBase<TYPE, SIZE> other,
-                TYPE tolerance = std::numeric_limits<TYPE>::epsilon()) {
-    if (typeid(TYPE) == int_id)
-      return this == other;
-
-    for (size_t i; i < SIZE; i++)
-      if (!ClockworkReverie::Math::approximately<TYPE>(values[i], other[i],
-                                                       tolerance))
-        return false;
-
-    return true;
-  }
 };
 
 template <Numeric TYPE = double, unsigned short int SIZE = 1>
-struct Point : PointBase<TYPE, SIZE>, Cartesian<TYPE, SIZE> {};
+struct Point : PointBase<TYPE, SIZE> {};
 
 NUMERIC_TEMPLATE
 struct Point<TYPE, 2> : PointBase<TYPE, 2>, Cartesian<TYPE, 2> {
