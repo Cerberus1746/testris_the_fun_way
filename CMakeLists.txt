@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
-project(${SKBUILD_PROJECT_NAME}
-  VERSION ${SKBUILD_PROJECT_VERSION}
+project(clockwork_reverie
+  VERSION 0.1.0
   LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -11,10 +11,8 @@ set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD ON)
 
 option(ENGINE_PYTHON_BINDINGS "Create the python bindings" ON)
 option(ENGINE_STATIC "Build SDL and the engine statically" ON)
+option(ENGINE_WITH_SDL "Use SDL Graphics" ON)
 option(USE_SDL_SUBMODULE "Use SDL from git in submodules" ON)
-
-include_directories(include)
-include_directories(submodules/shadercross)
 
 add_compile_options(-fno-stack-protector -fno-fast-math  -fPIC)
 
@@ -25,26 +23,35 @@ endif()
 if(ENGINE_STATIC)
   set(SDL_STATIC ON)
   set(SDL_SHARED OFF)
-  add_library(${SKBUILD_PROJECT_NAME} STATIC)
+  add_library(${PROJECT_NAME} STATIC)
 else()
   set(SDL_STATIC OFF)
   set(SDL_SHARED ON)
-  add_library(${SKBUILD_PROJECT_NAME} SHARED)
+  add_library(${PROJECT_NAME} SHARED)
 endif()
 
-add_subdirectory(submodules/tomlplusplus)
+if(ENGINE_WITH_SDL)
+  target_sources(${PROJECT_NAME}
+    PUBLIC
+      FILE_SET public_header_files TYPE HEADERS BASE_DIRS
+        submodules/shadercross
+  )
 
-if(USE_SDL_SUBMODULE)
-    add_subdirectory(submodules/sdl)
-else()
-  if(ENGINE_STATIC)
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-static)
+  add_compile_definitions(WITH_SDL)
+  if(USE_SDL_SUBMODULE)
+      add_subdirectory(submodules/sdl)
   else()
-    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-dynamic)
+    if(ENGINE_STATIC)
+      find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-static)
+    else()
+      find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-dynamic)
+    endif()
   endif()
 endif()
 
-target_sources(${SKBUILD_PROJECT_NAME}
+#add_subdirectory(submodules/tomlplusplus)
+
+target_sources(${PROJECT_NAME}
   PUBLIC
     FILE_SET all_modules TYPE CXX_MODULES FILES
       src/utils.ixx
@@ -58,24 +65,37 @@ target_sources(${SKBUILD_PROJECT_NAME}
       src/math/coordinates/points.ixx
 
       src/graphics/mesh.ixx
-      src/graphics/window.ixx
 
       src/math/geometry/geometry.ixx
       src/math/geometry/basic_shapes.ixx
-
-
-
 )
 
-target_compile_options(${SKBUILD_PROJECT_NAME} PRIVATE -Wall)
-target_link_libraries(${SKBUILD_PROJECT_NAME} PRIVATE SDL3::SDL3)
+target_sources(${PROJECT_NAME}
+  PUBLIC
+    FILE_SET public_header_files TYPE HEADERS BASE_DIRS
+      include
+)
+
+if(ENGINE_WITH_SDL)
+  target_sources(${PROJECT_NAME}
+    PUBLIC
+      FILE_SET all_modules TYPE CXX_MODULES FILES
+        src/graphics/window.ixx
+  )
+endif()
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall)
+
+if(ENGINE_WITH_SDL)
+  target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
+endif()
 
 if(EMSCRIPTEN)
   add_link_options(-fexceptions)
 endif()
 
 if(ENGINE_PYTHON_BINDINGS)
-  set(PY_MODULE ${SKBUILD_PROJECT_NAME}_py)
+  set(PY_MODULE ${PROJECT_NAME}_py)
   find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
   # execute_process(
@@ -90,15 +110,15 @@ if(ENGINE_PYTHON_BINDINGS)
 
   target_sources(${PY_MODULE}
     PUBLIC
-      FILE_SET all_modules TYPE CXX_MODULES FILES
+      FILE_SET python_bindings TYPE CXX_MODULES FILES
         src/python_module/vectors.ixx
   )
 
   target_compile_options(${PY_MODULE} PRIVATE -Wall)
 
-  target_link_libraries(${PY_MODULE} PRIVATE ${SKBUILD_PROJECT_NAME})
+  target_link_libraries(${PY_MODULE} PRIVATE ${PROJECT_NAME})
 
-  add_dependencies(${PY_MODULE} ${SKBUILD_PROJECT_NAME})
+  add_dependencies(${PY_MODULE} ${PROJECT_NAME})
 
   install(TARGETS ${PY_MODULE} DESTINATION .)
 endif()

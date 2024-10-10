@@ -1,18 +1,18 @@
 module;
-
+#ifdef WITH_SDL
 #define SDL_GPU_SHADERCROSS_IMPLEMENTATION
 #include <SDL_gpu_shadercross.h>
 
 #include <SDL3/SDL.h>
-
-#include <memory>
-#include <string>
-#include <variant>
-
+#endif
 export module clockwork_reverie;
 
 import clockwork_reverie.utils;
+
+#ifdef WITH_SDL
 import clockwork_reverie.graphics.window;
+#endif
+
 import clockwork_reverie.math.geometry.basic_shapes;
 
 namespace geometry = ClockworkReverie::Math::Geometry;
@@ -22,11 +22,13 @@ struct Main final {
 private:
   Utils::Version *version;
   const char *name;
+  bool is_running;
+#ifdef WITH_SDL
   SDL_Event event;
   SDL_GPUDevice *device;
-  bool is_running;
 
   Graphics::Window *main_window;
+#endif
 
   // SDL_Event event;
   // bool is_running;
@@ -34,13 +36,14 @@ private:
 public:
   Main(const char *name, Utils::Version *version)
       : version(version), name(name) {
+#ifdef WITH_SDL
     if (!SDL_Init(SDL_INIT_VIDEO)) {
       SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
       throw;
     }
 
-    device = SDL_CreateGPUDevice(SDL_ShaderCross_GetSPIRVShaderFormats(),
-                                 true, nullptr);
+    device = SDL_CreateGPUDevice(SDL_ShaderCross_GetSPIRVShaderFormats(), true,
+                                 nullptr);
     if (device == nullptr) {
       SDL_Log("GPUCreateDevice failed");
       throw;
@@ -50,19 +53,23 @@ public:
 
     Graphics::Window window(name, &size, device, SDL_WINDOW_VULKAN);
     this->main_window = &window;
+#endif
 
     is_running = true;
     while (is_running) {
+
+#ifdef WITH_SDL
       while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
           is_running = false;
           SDL_Log("Quit signal detected.");
+          break;
         } else if (event.type == SDL_EVENT_KEY_DOWN) {
         }
-
-        if (!is_running)
-          break;
       }
+#endif
+      if (!is_running)
+        break;
     }
     /*
     auto vertex_shader = LoadShader(device, "RawTriangle.vert", 0, 0, 0, 0);
@@ -75,6 +82,7 @@ public:
     */
   }
 
+#ifdef WITH_SDL
   SDL_GPUShader *LoadShader(SDL_GPUDevice *device, const char *full_path,
                             Uint32 samplerCount, Uint32 uniformBufferCount,
                             Uint32 storageBufferCount,
@@ -110,7 +118,7 @@ public:
     };
 
     auto shader = static_cast<SDL_GPUShader *>(
-        SDL_ShaderCross_CompileFromSPIRV(device, &shaderInfo, false));
+        SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(device, &shaderInfo));
 
     if (shader == nullptr) {
       SDL_Log("Failed to create shader!");
@@ -121,5 +129,6 @@ public:
     SDL_free(code);
     return shader;
   }
+#endif
 };
 } // namespace ClockworkReverie
